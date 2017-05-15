@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- API: https://github.com/d3/d3/wiki/API-Reference  -->
+<!-- wichtige Seite für simulation: http://alignedleft.com/projects/2014/easy-as-pi/ (CODE weiter unten ausführen!!!) -->
+<!-- Main Tutorials:!!! http://alignedleft.com/tutorials/d3/making-a-scatterplot -->
+<!-- andere Tutoraial Seite: https://www.sitepoint.com/simple-bubble-charts-using-d3-js/ -->
+<!-- Karthesian Coordinate System: Code! https://codepen.io/Dentz/pen/qZVZwB-->
+<!-- wichtig: ich hab die 3d version 4 daher sind manche Befehle anders! -->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Graph extended</title>
+        <script type="text/javascript" src="d3/d3.js"></script>
+	    <script type="text/javascript" src="page7.js"></script>
+		<script type="text/javascript" src="math.js"></script>
+		<link rel="stylesheet" type="text/css" href="page6.css" />
+    </head>
+    <body>	
+		
+	<input id="scale" type="text" name="scale" value="-10 10">
+	<input id="Gleichung" type="text" name="Gleichung" value="x" >
+	<button class="button" id="button_Gleichung" onclick="plot_Gleichung()">Plot it!</button>
+	<output id = "output1" name="Der Name" value="wert">Möglicher Input: sin(x)+cos(x)*e^x-x^6+sqrt(x^4)</output>
+	
+	<div id="graph" ></div>
+    </body>
+</html>     

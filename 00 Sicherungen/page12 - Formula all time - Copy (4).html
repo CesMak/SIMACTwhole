@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- API: https://github.com/d3/d3/wiki/API-Reference  -->
+<!-- wichtige Seite für simulation: http://alignedleft.com/projects/2014/easy-as-pi/ (CODE weiter unten ausführen!!!) -->
+<!-- Main Tutorials:!!! http://alignedleft.com/tutorials/d3/making-a-scatterplot -->
+<!-- andere Tutoraial Seite: https://www.sitepoint.com/simple-bubble-charts-using-d3-js/ -->
+<!-- Karthesian Coordinate System: Code! https://codepen.io/Dentz/pen/qZVZwB-->
+<!-- wichtig: ich hab die 3d version 4 daher sind manche Befehle anders! -->
+<!-- HTML autoformat - funktoniert nicht richtig irwie: Plugins -> XML Tools -> Indent   -->
+ <!-- <br> macht neue linie -->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Formulas - all time</title>
+		
+		<!-- include Highcharts: -->
+		<script  type="text/javascript" src="HighCharts/code/highcharts.js"></script> 
+		<script type="text/javascript" src="HighCharts/js/themes/gray.js"></script>
+		
+		<!-- load d3s script for drawing -->
+        <script type="text/javascript" src="d3/d3.js"></script>
+		
+		<!-- KATEX-Latex fast rendering: and information sites:
+		http://willdrevo.com/latex-equation-rendering-in-javascript-with-jekyll-and-katex/
+		http://www.intmath.com/blog/mathematics/katex-a-new-way-to-display-math-on-the-web-9445
+		http://tiddlywiki.com/plugins/tiddlywiki/katex/		 -->
+		
+		<!-- Katex offline source:  -->
+		<link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
+		<script  type="text/javascript" src="katex/katex.min.js"></script> 		<!-- Schau dir nochmal angular JS an warum geht das bei mir nicht?! http://jsbin.com/gatosifepe/edit?html,css,js,output -->
+		
+		
+		<!-- script for Matrices etc. -->
+		<script type="text/javascript" src="math.js"></script>
+		
+		<!-- RequireJS is a JavaScript file and module loader.-->
+		<script type="text/javascript" src="require.js"></script>
+		
+		<!-- load symblic scripts-->
+		<script  type="text/javascript" src="symbolic/nerdamer.core.js"></script> 
+		<script  type="text/javascript" src="symbolic/Algebra.js"></script>
+		<script  type="text/javascript" src="symbolic/Calculus.js"></script>
+		
+		<!-- logic for this website -->
+		<script type="text/javascript" src="page12 - Formula all time.js"></script>
+		
+		<!-- online sources for ausblenden Funktion -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<!-- JQuerry wird genutzt für local storage... -Ist in meinem angepassten code nicht nötig! -->
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+  
+  		<!-- Load css sheet  Es ist wichtig dass dies am Ende des Head steht!-->
+		<link rel="stylesheet" type="text/css" href="page12 - Formula all time.css" />
+	
+    </head>
+	
+	
+    <body>	
+	
+		<!-- Überschriften: -->
+		<div id="container"> <h1>Formelsammlung</h1> 
+		</div><!-- /#container -->
+	
+		<!-- das ist die horizontale Überschrifts Linie -->
+		<div id="linie"><hr class="linie" > </div>
+		
+
+		
+		<!-- Hauptcontainer-->
+ 		<div id="Hauptcontainer">
+		
+		<div id="Containerbox1" class="Containerbox">
+		<h2>Überschrift</h2> 
+		<div id="linie"><hr class="liniebox" > </div>
+		</div>
+		
+		<div id="Containerbox2" class="Containerbox"> 
+				<h2 id="ueb2">Überschrift2</h2>
+				<h3>[Bearbeiten, <a href="#content1" data-toggle="collapse"> Ausbldenden</a>, Markieren(z.B. für FS erstellun etc.),Felder bewegen(bilder verschieben, formeln verschieben etc.)]       HIer noch youtube link, wiki link etc machen!</h3>
+				<h4 id="kat_2" >Mehrgrößensysteme</h4> 
+				<h4>_|_</h4>
+				<h4 id="kat_1" >Regelungstechnik</h4>
+				<hr class="liniebox" >
+				
+				<div id="content1" class="collapse in"> <!-- collapsing div -->
+					<p id="p2" >In der Bandbreite unlimitiertes <a href="#Containerbox1">Jump to Containerbox1</a> weißes Rauschenist <div id ="equation2" class="equation-inline" data-expr="c = \pm\sqrt{a^2 + b^2}"> </div>  ein <br> modellhafter  <b> Grenzfall mit unendlich hoher Leistung und </b> tritt daher in der Praxis <i>This text is italic</i> nicht auf. In realen Systemen tritt weißes Rauschen immer <a href="https://www.w3schools.com/" target="_blank">Visit W3Schools open new window!!</a>  nur in einem Frequenzbereich mit in diesem  <font color="#ff9999">This is <b>some text! </b> in #ff9999 </font> Bereich konstantem Leistungsdichtespektrum auf. Das	  <font color="red">This is some text!</font>  LeistungsdichtespektrumHIer den Text  und $\alpha \beta$ und $$\frac{1}{1}$$   und $\alpha$.<img id="img9" src="https://en.wikipedia.org/wiki/JPEG#/media/File:Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png">. außerhalb dieser Bandbreite fällt nach oben hin, bei nur hinreichend hohen Frequenzen, immer gegen 0 ab.</p>
+					
+					<span class="katex-display">Hallo </span>
+					 
+					<div id ="equation3" class="equation-middle" data-expr="{}^{i-1}T_{i} = Rot(\theta,z)*Trans(d,z)*Rot(\alpha,x)*Trans(a,x)"></div> 
+
+					<img id="img2" src="img/DH1.png"> 
+					
+					 <a id="link11" href="www.google.de">www.google.de</a>
+					 <a id="link11" href="https://www.google.de">www.google.de</a>
+						
+						<img id="img9" src="https://en.wikipedia.org/wiki/JPEG#/media/File:Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png">.
+				</div>
+				
+				
+		</div>
+		
+		<div id="Containerbox3" class="Containerbox"> 
+				<h2 id="ueb2">Überschrift2</h2>
+				<h3>[Bearbeiten, <a href="#content3" data-toggle="collapse">Ausbldenden</a>, Markieren(z.B. für FS erstellun etc.),Felder bewegen(bilder verschieben, formeln verschieben etc.)]</h3>
+				<h4 id="kat_2" >Regelungstechnik | Mehrgrößensysteme</h4> <!-- TODO mach das als 2 Dinger -->
+				<div id="linie"><hr class="liniebox" > </div>
+				
+				<div id="content3" class="collapse in"> <!-- collapsing div -->
+				</div>
+				
+				
+				
+		</div>
+		
+		<!-- add new Container Block: -->
+		<div id="Containerbox_n+1" class="Containerbox" >
+			<h2 id="addNewItem">Add a new Item: </h2> <input id="addUe" class="addUe" type="text" name="Ueberschrift" value="Überschrift" onclick="addUe()">
+			<input id="addK2" class="addUe" type="text" name="Kategorie2" value="Kategorie2"    onclick="addK2()">
+			<input id="addK1" class="addUe" type="text" name="Kategorie1" value="Kategorie1"    onclick="addK1()">
+			
+			<h2 id="addNewItem">Structure of Items: </h2> 
+			<select  id="selectTable" onchange="selectChange()">
+				<option value="Table(1x1)">Table (1 x 1)</option>
+				<option value="Table(1x2)">Table (1 x 2)</option>
+				<option value="Table(1x3)">Table (1 x 3)</option>
+				<option value="Table(1x5)">Table (1 x 5)</option>
+			</select>
+			<div id="addlinie"><hr class="liniebox" > </div>
+			
+			<div id="addContent"> <!-- Hier wird content geadded  über javascript -->
+			
+			</div>
+		
+			<!-- <textarea id="addTextarea" rows="2" cols="180" type="text">In der Bandbreite unlimitiertes weißes Rauschen ist ein modellhafter Grenzfall mit unendlich hoher Leistung....</textarea>
+			<br> -->
+			<button id="addSaveButton" onclick="save()">Speichern</button>
+			
+			
+			
+		</div>
+		
+		<div id="Containerboxneue" class="Containerbox"> 
+		</div>
+		
+	 </div><!-- Ende Hauptcontainer -->
+	 
+	 <div class="clearer"></div>
+
+	  <div id="linie"><hr class="linie" > </div>
+	  
+	  <!-- Footer -->
+	  <div class="footer">
+	  <h2>TODO: </h2> 
+	  <br>
+	  <h3>-KlammerProblem lösen. </h3>
+	  <br>
+	  <h3>-Mach die add Table zuerst denn das beinhaltet sehr viel! </h3>
+	  <br>
+	  <h3>-Erst für 1x1 Tabelle Überschrift: h1(hier übText) und Fett,kursiv, hyperlink schreiben text machen. Außerdem auch farbig schreiben? </h3>
+	  <br>
+	  <h3>-http://tiddlywiki.com/ Mach so ein Input fenster wie hier! (bloß mit nicht ganz so vielen Funktionen!) </h3>
+	  <br>
+	  <h3>-Für Matlab Engine schau dir in Mehrgrößen die Aufgaben zu Matlab an und setze diese in JS in meinem online Matlab Engine um!</h3>
+	  
+	  </div>
+    </body>
+	
+</html>     

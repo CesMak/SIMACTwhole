@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- API: https://github.com/d3/d3/wiki/API-Reference  -->
+<!-- wichtige Seite für simulation: http://alignedleft.com/projects/2014/easy-as-pi/ (CODE weiter unten ausführen!!!) -->
+<!-- Main Tutorials:!!! http://alignedleft.com/tutorials/d3/making-a-scatterplot -->
+<!-- andere Tutoraial Seite: https://www.sitepoint.com/simple-bubble-charts-using-d3-js/ -->
+<!-- Karthesian Coordinate System: Code! https://codepen.io/Dentz/pen/qZVZwB-->
+<!-- wichtig: ich hab die 3d version 4 daher sind manche Befehle anders! -->
+<!-- HTML autoformat - funktoniert nicht richtig irwie: Plugins -> XML Tools -> Indent   -->
+
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>PD Controller</title>
+		
+		<!-- High Charts Scripts: (offline source): -->
+		<script type="text/javascript" src="libs/HighCharts/code/highcharts.js"></script>
+		<script type="text/javascript" src="libs/HighCharts/code/highcharts-3d.js"></script>
+		<script type="text/javascript" src="libs/HighCharts/code/modules/exporting.js"></script>
+		<script type="text/javascript" src="libs/HighCharts/api/js/jquery-1.11.3.min.js"></script>
+		
+		<!-- High Charts Scripts: (online source): -->
+		<!-- <script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		 -->
+		 
+		 
+		<!-- KATEX-Latex fast rendering: and information sites:
+		http://willdrevo.com/latex-equation-rendering-in-javascript-with-jekyll-and-katex/
+		http://www.intmath.com/blog/mathematics/katex-a-new-way-to-display-math-on-the-web-9445
+		http://tiddlywiki.com/plugins/tiddlywiki/katex/
+		 --><link rel="stylesheet" type="text/css" href="libs/katex/katex.min.css" />
+		<script  type="text/javascript" src="libs/katex/katex.min.js"></script>
+		
+		<!-- script for Matrices etc. Damit kann man math.im und math.re(...) nutzen geht das mit der standart Math. Bibliothek nicht? TODO-->
+		<script type="text/javascript" src="libs/math.js"></script>
+		
+		<!-- RequireJS is a JavaScript file and module loader.-->
+		<script type="text/javascript" src="libs/require.js"></script>
+		
+		<!-- load symblic scripts-->
+		<script  type="text/javascript" src="libs/symbolic/nerdamer.core.js"></script>
+		<script  type="text/javascript" src="libs/symbolic/Algebra.js"></script>
+		<script  type="text/javascript" src="libs/symbolic/Calculus.js"></script>
+		<script  type="text/javascript" src="libs/symbolic/Solve.js"></script>
+		<script  type="text/javascript" src="libs/symbolic/Special.js"></script>
+		
+		<!-- logic for this website -->
+		<script type="text/javascript" src="page11.js"></script>
+		
+		<!-- Load css sheet -->
+		<link rel="stylesheet" type="text/css" href="page11.css" />
+    </head>
+	
+	
+    <body>	
+	
+		<!-- Überschriften: -->
+		<div id="container"> 
+		<div id="linkeBox"><hG1> PD Controller </hG1> </div>
+		<div id="rechteBox"><hG1> Explanation of the PD Controller</hG1> </div>
+		</div><!-- /#container -->
+		<!-- hebt später die floats auf -->
+		<div class="clearer"></div>
+	
+		<!-- das ist die horizontale Überschrifts Linie -->
+		<div id="linie"><hr class="linie" > </div>
+ 
+		<!-- Hauptcontainer-->
+ 		<div id="Hauptcontainer">
+		<div id="Hlinks">
+			<h2> Input: </h2> 
+		
+		<div id="alleInputNamen">
+		<p>Mass  &emsp;m  =</p>
+		<p>Bumper b  = </p>
+		<p>Spring &ensp;k  =</p>
+		<p>k_p    &emsp;k_p =</p>
+		<p>k_d    &emsp;k_d =</p>
+		<p>x(0)    &emsp;x(0) =</p>
+		<p>dx(0) dx(0)=</p>
+		</div>
+		
+		<div id="alleInputSpans">
+		<p id="range1">0</p>
+		<p id="range2">0</p>
+		<p id="range3">0</p>
+		<p id="range4">0</p>
+		<p id="range5">0</p>
+		<p id="range6">0</p>
+		<p id="range7">0</p>
+		</div>
+		
+		<div id="alleInputSpans2">
+		<p id="range">kg</p>
+		<p id="range">kg/s</p>
+		<p id="range">kg/s^2</p>
+		<p id="range">-</p>
+		<p id="range">-</p>
+		<p id="range">m</p>
+		<p id="range">m/s</p>
+		</div>
+		
+		<div id="alleInputSlider" class="alleInputSlider">
+		<input type="range" min="0.5" max="10" value="5" step="0.5"  onchange="showValue1(this.value)" class="slider" />
+		<input type="range" min="0" max="10" value="5" step="0.5"  onchange="showValue2(this.value)" class="slider" />
+		<input type="range" min="0" max="10" value="5" step="0.5"  onchange="showValue3(this.value)" class="slider" />
+		<input type="range" min="0.5" max="10" value="5" step="0.5"  onchange="showValue4(this.value)" class="slider" />
+		<input type="range" min="0" max="10" value="5" step="0.5"  onchange="showValue5(this.value)" class="slider" />
+		<input type="range" min="0" max="10" value="0" step="0.5"  onchange="showValue6(this.value)" class="slider" />
+		<input type="range" min="0" max="10" value="0" step="1"  onchange="showValue7(this.value)" class="slider" />
+		</div>
+	
+	<!-- Buton zur Berechnung: accuraccy = Rundgungsgenauigkeits Faktor! Band: z.B. das 5% Band in für das dann die settling time berechnet wird!-->
+	<div id="buttonFeld">
+		 <label><input type="checkbox" onclick="handleClick(this);" id="chb1" value="first_checkbox">Use concrete values</label><br>
+		 <textarea rows="13" cols="30" type="text" id ="textarea1" class="textarea" >Info: only change values between "=" and ";" do not change line order!
+--
+m=3.0;        [kg]
+b=3;         [kg/s]
+k=1.5;         [kg/s^2]
+k_p=13.5;
+k_d=10.42;
+x(0)=0;        [m]
+dx(0)=0;      [m/s]
+---
+t in [0,t2],t2=3; [s]
+Diskretisierung_x=0.005; 
+Band = 1;          [%]
+Rounding=4; [after comma]
+</textarea>
+		 <button class="button" id="button_Gleichung" onclick="update()">Draw it!</button>
+	</div>
+	
+	<div class="clearer"></div>	
+		
+			
+		<h2> Output: </h2> 
+	<!-- Highcharts: -->
+	<div id="highcharts" style="height: 400px; width: 600px"></div>
+	
+		<h2> Deeper Analysis: </h2> 
+		<div id ="eqleft1" class="equation" data-expr=""></div>
+		<h3 id="ueb1"></h3> 
+		<div id ="eqleft2" class="equation" data-expr=""></div>
+		<div id ="eqleft3" class="equation" data-expr=""></div>
+		<div id ="eqleft4" class="equation" data-expr=""></div>
+		<div id ="eqleft5" class="equation" data-expr=""></div>
+		
+	 </div>
+
+	<div id="Hrechts">
+	
+		<!--Block-diagramm -->
+		<div id="block-diagramm" style="height: 150px; width: 600px"></div>
+		
+		<!-- Orskurve: -->
+		<div id="ortskurve" style="height: 400px; width: 600px"></div>
+	
+		<div id ="equationsright" class="equation" data-expr=""></div>
+		<script>katex.render(" m\\ddot{x}(t)+b\\dot{x}(t)+kx(t)=f(t)", equationsright);</script> 
+		
+		<div id ="equationsright2" class="equation" data-expr=""></div>
+		<script>katex.render("f(t)_{PD-Regler} = k_p[x_d(t)-x(t)] + k_d[\\dot{x}_d(t)-\\dot{x}(t)] = k_p*e(t) + k_d*\\dot{e}(t)", equationsright2);</script> 
+		
+		<div id ="equationsright3" class="equation" data-expr=""></div>
+		<script>katex.render("m\\ddot{x}(t)+b\\dot{x}(t)+kx(t)=k_p[x_d(t)-x(t)] + k_d[\\dot{x}_d(t)-\\dot{x}(t)]", equationsright3);</script> 
+		
+		<div id ="equationsright4" class="equation" data-expr=""></div>
+		<script>katex.render("m\\ddot{x}(t)+(b+k_d)\\dot{x}(t)+(k+k_p)x(t)=k_p[x_d(t)] + k_d[\\dot{x}_d(t)]", equationsright4);</script> 
+		
+		<div id ="equationsright5" class="equation" data-expr=""></div>
+		<script>katex.render("\\lambda_{1,2} =-\\frac{b+k_d}{2m} \\pm \\frac{\\sqrt{(b+k_d)^2-4m(k+k_p)}}{2m} \\quad \\text{allgemeine Formel für die Eigenwerte}", equationsright5);</script> 
+		
+		
+		<h3 id="Überschwingen:">Überschwingen</h3> 
+		<div id ="equationsright6" class="equation" data-expr=""></div>
+		<script>katex.render("\\large {\\text{overshoot = ue} = \\frac{y_{max}-y_{stat}}{y_{max}}*100\\% =\\frac{x_{max}-x_{stat}}{x_{max}}*100\\% \\qquad \\text{(da y=x(t))} }", equationsright6);</script> 
+		
+		<h3 id="estat">Stationärer Fehler: </h3> 
+		<div id ="equationsright7" class="equation" data-expr=""></div>
+		<script>katex.render("\\large {  e_{stat,\\%}=\\frac{x_d - x_{stat}}{x_d}*100\\%= \\frac{y_{soll} - y_{stat}}{y_soll}*100\\% \\qquad \\text{  d=desired}}", equationsright7);</script> 
+		
+		<h3 id="estat">Übertragungsfunktion:</h3> 
+		<div id ="equationsright8" class="equation" data-expr=""></div>
+		<script>katex.render("\\large { G(s)=\\frac{\\text{Ausgang}}{\\text{Eingang} }=\\frac{X(s)}{X_d(s)}=\\frac {k_p-k_d*s}{m*s^2+(k+k_d)s+(k+k_p)}\\stackrel{\\text{s=jw}}{=} \\frac{k_p-k_d*j\\omega}{-m*\\omega^2+(k+k_d)*j\\omega+(k+k_p)}   }", equationsright8);</script> 
+		
+		
+		<h3 id="TODO">Website Name: Simact simulative adaptive Control Theory </h3> 
+		<h3 id="TODO">simact  alternative: markuslab.de </h3> 
+		<h3 id="TODO">TODO: </h3> 
+		<h3 id="TODO"></h3> 
+		<h3 id="TODO">live-Simulation des ganzen mit blöcken!</h3> 
+		<h3 id="TODO">-Bodediagramm, WOK, NyquistDiagramm, I-Glied</h3> 
+		<h3 id="TODO">Stability analysis</h3> 
+		<h3 id="TODO">Schau dir mal genauer den CDF wolfram alpha player an der macht vieles einfacher aber den hat kaum jemand</h3> 
+		<h3 id="TODO">Phase plot machen! - </h3> 
+	</div>
+
+
+	 </div><!-- Ende Hauptcontainer -->
+	 
+	 <div class="clearer"></div>
+
+	  <div id="linie"><hr class="linie" > </div>
+	  
+	  <!-- Hintergrundwissen -->
+	  <div class="Hintergrundwissen">
+	  <h2> Hier steht das Hintergrundwissen</h2> 
+	  </div>
+
+	  <div id="linie"><hr class="linie" > </div>
+	  
+	  <!-- Footer -->
+	  <div class="footer">
+	  <h2>Footer</h2> 
+	  </div>
+	  
+    </body>
+	
+	
+
+	<!-- Show default values: -->
+	<script>startValues()</script> 
+	
+	
+</html>     

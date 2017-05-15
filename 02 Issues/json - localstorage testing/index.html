@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <title>jQuery Table</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>
+            var tblRecord = [];
+            $(document).ready(function () {
+
+                createTableRow();
+
+                $("#save").click(function () {
+                    var fname = $("#fname").val();
+                    var sub = $("#sub").val();
+                    var mark = $("#mark").val();
+                    /*
+                     var tblObj = {};
+                     tblObj.fname = fname;
+                     tblObj.sub = sub;
+                     tblObj.mark = mark;
+                     */
+                    var tblObj = {fname: fname, sub: sub, mark: mark};
+                    tblRecord.push(tblObj);
+
+                    console.log(tblRecord);
+                    //convert js object to json string
+                    localStorage.tblData = JSON.stringify(tblRecord);
+                    createTableRow();
+
+                });
+            });
+
+            //function createTableRow(){}
+            var createTableRow = function () {
+                //convert json string to js object
+                if (localStorage.tblData) {
+                    tblRecord = JSON.parse(localStorage.tblData);
+                    $("tbody").empty();
+                    for (var i = 0; i < tblRecord.length; i++) {
+
+                        var fname = tblRecord[i].fname;
+                        var sub = tblRecord[i].sub;
+                        var mark = tblRecord[i].mark;
+
+                        var tblrow = "<tr><td>" + (i + 1) + "</td><td>"
+                                + fname + "</td><td>"
+                                + sub + "</td><td>"
+                                + mark + "</td></tr>";
+
+                        $("tbody").append(tblrow);
+                    }
+                }
+
+                $("#fname").val("");
+                $("#sub").val("");
+                $("#mark").val("");
+            };
+
+        </script>
+        <style>
+            .container{
+                width: 900px;
+                margin: 0 auto;
+                min-height: 800px;
+                background-color: #ffcccc;
+            }
+
+            .formbox{
+                margin: 10px;
+
+            }
+
+            label{
+                padding-top: 10px;
+                width: 100px;
+                display: block;
+            }
+
+            input{
+                width: 100%;
+                height: 30px;
+            }
+            table{
+                margin: 0 auto;
+            }
+
+            th{
+                width: 100px;
+                padding: 10px;
+                border: 1px solid;
+            }
+
+            td{
+                width: 100px;
+                padding: 10px;
+                border: 1px solid;
+                background-color: cornsilk; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="formbox">
+                <label for="fname">Name</label>
+                <input type="text" placeholder="Enter name" id="fname" name="fname">
+            </div>
+            <div class="formbox">
+                <label for="sub">Subject</label>
+                <input type="text" placeholder="Enter Subject" id="sub" name="sub">
+            </div>
+            <div class="formbox">
+                <label for="mark">Mark</label>
+                <input type="text" placeholder="Enter Mark" id="mark" name="mark">
+            </div>
+            <div class="formbox">
+                <label for="save"></label>
+                <button id="save">Save</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Mark</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+            </table>
+        </div>
+    </body>
+</html>
+

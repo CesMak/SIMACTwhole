@@ -1,0 +1,229 @@
+/* Grundstrucktur von CSS Dokument: selektor { eigenschaft: wert; } oder selektor { deklaration } */
+/* comment_here  STR+UMSHALCT+Q*/
+
+/* box für überschrift*/
+#container {
+ display: block;
+ margin: 0 auto;
+ width: 1366px;
+ background: #eafaea;
+ text-align: center;
+}
+
+.linie {
+border :none;
+border-top: 3px solid #737373;
+background-color:#FFFFFF;
+margin: 0px 0px 0px 0px;
+width: 1366px;
+/* margin-left:px; */
+padding: 0px;/* Platz nach unten*/
+}
+
+.liniebox {
+border :none;
+border-top: 1px solid #C0C0C0;
+height: 1px; 
+margin: 0px 0px 0px 0px;
+width: 1295px;
+padding: 5px;/* Platz nach unten*/
+}
+
+/* Hauptinhaltbox: */
+#Hauptcontainer {
+ margin: 0px 30px 0px 30px; /* top right bottomn left */
+ width: 1306px;
+ text-align: center;
+ vertical-align: top;
+}
+
+#addContent{
+	width:1270px;
+	vertical-align:top;
+	text-align:left;
+}
+
+.Containerbox{
+	float: left;
+	width: 1306px; /* ist variabel - soll auch nur halb so groß möglich sein!? */
+	text-align: left;	
+	margin: 10px 0px 10px 0px;
+	/* border-right: 2px solid #e8e8e8;/*  mittel linie! */
+	/*border-bottom: 2px solid #e8e8e8;  /* mittel linie! */
+	vertical-align: top;
+	background: #ffffff;
+}
+
+#content1{
+	float: left;
+	width: 1306px; /* ist variabel - soll auch nur halb so groß möglich sein!? */
+	text-align: left;	
+	margin: 0px 0px 0px 0px;
+	vertical-align: top;
+	background:  #ffffff;
+}
+
+h1{
+	font-size:20px; 
+	color: #003300 ;
+	display: inline;
+}
+
+h2{
+	font-size:18px;
+	margin: 0px 0px 0px 0px;
+	display:inline;
+}
+
+h3{
+	display:inline;
+	font-size:12px;
+	margin: 0px 0px 0px 0px;
+}
+
+h4{
+	display:inline;
+	font-size:12px;
+	margin: 0px 0px 0px 0px;
+	text-align:right;
+	float:right;
+}
+
+p{
+	font-size:15px;
+	display:inline;
+	line-height: 150%;
+}
+
+.addUe{
+	color: #94b8b8;
+}
+
+/* for alle equation classes:  See : https://gist.github.com/xymostech/44d9c92207fa2d1431f6 */
+.equation-inline {
+  display:         inline-block;
+  text-align:      left;
+  font-size:       1em; /* size of Equations!!! */
+  margin: 0 auto;
+}
+
+.equation-middle{
+	margin: 1em 0;
+	text-align: center;
+}
+
+/* input felder: */
+#addK1{
+	float: right;
+	margin: 0px 5px 0px 0px;
+}
+
+#addK2{
+	float: right;
+	margin: 0px 0px 0px 0px;
+}
+
+#addItemButton{
+	display: inline-block;
+	vertical-align: top;
+	margin: 10px 0px 0px 0px;
+}
+
+#addTextarea{
+  font-size: 15px;
+  line-height: 150%;
+  display:inline-block;
+  margin: 0px 0px 0px 20px;
+}
+
+#addSaveButton{
+	padding: 0px 50px;
+	display: block;
+    margin: 10px auto;
+	margin-left:50%;
+  margin-right:50%;
+  position: relative;
+}
+
+
+
+#Hlinks {
+	float: left;
+	width: 643px;
+	text-align: left;	
+	margin: 0px 10px 0px 0px;
+	border-right: 2px solid #e8e8e8; /* mittel linie! */
+	vertical-align: top;
+}
+
+#Hrechts {
+	float: right;
+	width: 641px; /*30 pixel weniger wegen 30px abstand zum linken rand */
+	text-align: left;
+	margin: 0px 0px 0px 10px;
+}
+
+.Hintergrundwissen {
+	width: 1366px;
+	text-align:center;
+}
+
+body {
+ background: #eafaea; /* background color, Hintergrund bild, dass sich auf horizontaler Ebene wiederholt */
+ color: #333333; 
+ margin: 10px 0px 0px 0px; /* äußerrer Abstand */
+ padding: 0; /* innerer Abstand */
+ font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+ /* font: 100%/1.5 'lucida grande', verdana, sans-serif;  /* Der Wert von 100% bezieht sich auf die Schriftgröße. Der Wert 1.5 bezieht sich auf die Zeilenhöhe und diese beträgt das 1,5-fache der Schriftgröße.  */
+ text-align: center; /* Zentriert den Inhalt für ältere Browser */
+ width: 1366px;
+ margin-left:auto; /* wichtig für center skalierung! */
+ margin-right:auto;
+ 
+ /* Damit nicht in Horizontaler Richtungsklaierung auftaucht: */
+/*  max-width: 100%; */
+/* overflow-x: hidden;  TODO: set this as optional!? */
+}
+
+.clearer {
+ clear: both;
+}
+
+.footer{
+	width: 1366px;
+	text-align:center;
+}
+
+/* Schönheitsaspekte: */
+#GleichungTextarea {
+  resize: none;
+  width: 220px;
+  height: 130px;
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+  border-radius: 5px 5px 5px 5px;
+  border-style: none solid solid none;
+  border-width: medium 1px 1px medium;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  color: #555555;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1em;
+  line-height: 1.3em;
+  padding: 5px 8px;
+  transition: background-color 0.2s ease 0s;
+  vertical-align: middle;
+}
+
+.button{
+	display: inline-block;
+	color: #666;
+	background-color: #eee;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	letter-spacing: 2px;
+	font-size: 12px;
+	padding: 10px 30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+}

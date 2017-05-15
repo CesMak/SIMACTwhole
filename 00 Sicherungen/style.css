@@ -1,0 +1,72 @@
+/* Grundstrucktur von CSS Dokument: selektor { eigenschaft: wert; } oder selektor { deklaration } */
+/* comment_here */
+
+#banner{
+ display: block; width: 900px; height: 90px;
+ background: url(img/header_v6.png) no-repeat;
+ text-indent: -9999px; /* Texteinrückung in den unsichtbaren bereich. */
+ position: relative;
+ margin: 0 auto; 
+ text-align: left;
+}
+
+
+.linie {
+border :none;
+border-top: 2px solid #e8e8e8;
+background-color:#FFFFFF;
+height: 2px; 
+margin: 0px 0px 0px 0px;
+width: 100%;
+padding: 0px;/* Platz nach unten*/
+}
+
+body {
+ background: #fdfdfd; /* background color, Hintergrund bild, dass sich auf horizontaler Ebene wiederholt */
+ color: #333333; 
+ margin: 0px 0px 0px 0px; /* äußerrer Abstand */
+ padding: 0; /* innerer Abstand */
+ font: 100%/1.5 'lucida grande', verdana, sans-serif;  /* Der Wert von 100% bezieht sich auf die Schriftgröße. Der Wert 1.5 bezieht sich auf die Zeilenhöhe und diese beträgt das 1,5-fache der Schriftgröße.  */
+ text-align: center; /* Zentriert den Inhalt für ältere Browser */
+}
+
+#container {
+ margin: 0 auto; text-align: left;
+ width: 900px;
+ padding: 1px; border: 0px solid #fdfdfd;
+ background: #fdfdfd;
+ position: relative;
+}
+
+/* Inhalt uns Menü nebeneinander: */
+#inhalt {
+ float: left; width: 750px;
+}
+
+#inhalt li{
+	margin-bottom: 20px;
+	
+}
+
+#sidebar {
+ float: right; width: 150px;
+}
+
+#sidebar ul {
+ list-style: none; padding-left: 0; margin-left: 0;
+}
+
+#sidebar li {
+ margin-bottom: 1px; 
+ padding: 2px 0 5px 12px; 
+ border-bottom: 1px solid #eed;
+}
+
+.clearer {
+ clear: both;
+}
+
+/* Footer: */
+#footer {
+ background: #fdfdfd;
+}

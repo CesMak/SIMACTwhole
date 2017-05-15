@@ -1,0 +1,76 @@
+SIMULATION: Hüpfende Kugel: S 13 Übungsskript SDRT III 1.17
+
+
+Einen kurze coole Erklärung machen zu: https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&index=2
+
+
+SDRT III Skript übung 7.1.4 online machen
+Vergleich von Stabilität und Parameterabhängigkeit eines
+nichtlinearen und linearen Reglers.
+
+
+-Trajektorien muss ich zeichnen können um eine Ruhelage herum 
+Teste nachfolgendes Beispiel:
+https://en.wikipedia.org/wiki/LaSalle's_invariance_principle
+
+Übung 6 - Aufgabe 4.1.10 f) so ein 3D plot über der Zeit sollte mölich sein!
+
+
+-Programmiere einen Trajektorienzeichner: siehe SDRT 1.1.12 Aufgabe 12.
+
+Anstatt Mathjax benutze evtl.: https://khan.github.io/KaTeX/
+ It way faster than MathJax and compact. It also allows you to render to and HTML string which can then be parsed. It also renders matrices correctly.
+ I've already pushed some changes to the master branch regarding matrix operations.
+
+
+1. Versuchs mit highcharts hinzubekommen
+2. Falls 3D sache nicht klappt benutze visjs
+
+plotly vs highcharts?!
+bzw. was ist mit http://visjs.org/graph2d_examples.html ??!? VIS.JS?!
+ https://plot.ly/javascript/3d-surface-plots/
+
+Display formelsammlung in browser - pdf in browser view!
+
+Besucherzähler -> benutze Google analytics.
+
+HIGHCHart - scatter 3D
+http://www.highcharts.com/demo/3d-scatter-draggable
+C3s plot??
+
+-mach mal ne quadtree zerlegung!(siehe Ü11)
+
+
+INTEGRATE highcharts in webpage to plot 3D aber Achtung das ist nur möglich für 
+Webseiten die nicht kommerziell sind!
+
+
+MATLAB Befehlsleiste programmieren! plot(....) nerdamer nach Plot befehl fragen!?
+-> nerdamer antworten.
+
+
+Links für Regelungstechnik:
+
+http://www.kramann.info/64_Regelungssysteme/11_Stabilitaet/03_Windup/index.php
+
+
+- ikfast Roboterarmsimulation mit ROS (siehe S. 48)
+- P,D,I Anteil auwirkung bei sprungantwort mal programmieren!
+http://ctms.engin.umich.edu/CTMS/index.php?example=Introduction&section=ControlPID
+
+
+Website DH Tabelle berechnen: 
+(mit symbolen und dann diese anschließend vereinfachen)
+http://nerdamer.com/ 
+
+
+ i | theta_i | d_i | a_i | alpha_i |
+------------------------------------
+ 1 | q1      | d1 |  0  | a1       |
+ 2 | 0       | q2 |  0  | a1       |
+
+
+Wandel in text form um und dann zu latex.    
+<!DOCTYPE html> <html> <body>  <h1>My First Web Page</h1> <p>My First Paragraph</p>  <p id="demo"></p>  
+<script> document.getElementById("demo").innerHTML = 5 + 6; </script>  </body> </html>
+

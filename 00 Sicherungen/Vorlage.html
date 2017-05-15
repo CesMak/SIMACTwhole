@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- API: https://github.com/d3/d3/wiki/API-Reference  -->
+<!-- wichtige Seite für simulation: http://alignedleft.com/projects/2014/easy-as-pi/ (CODE weiter unten ausführen!!!) -->
+<!-- Main Tutorials:!!! http://alignedleft.com/tutorials/d3/making-a-scatterplot -->
+<!-- andere Tutoraial Seite: https://www.sitepoint.com/simple-bubble-charts-using-d3-js/ -->
+<!-- Karthesian Coordinate System: Code! https://codepen.io/Dentz/pen/qZVZwB-->
+<!-- wichtig: ich hab die 3d version 4 daher sind manche Befehle anders! -->
+<!-- HTML autoformat - funktoniert nicht richtig irwie: Plugins -> XML Tools -> Indent   -->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Denavit Hartenberg Converter</title>
+		
+		<!-- include Highcharts: -->
+		<script  type="text/javascript" src="HighCharts/code/highcharts.js"></script> 
+		<script type="text/javascript" src="HighCharts/js/themes/gray.js"></script>
+		
+		<!-- load d3s script for drawing -->
+        <script type="text/javascript" src="d3/d3.js"></script>
+		
+		<!-- KATEX-Latex fast rendering: and information sites:
+		http://willdrevo.com/latex-equation-rendering-in-javascript-with-jekyll-and-katex/
+		http://www.intmath.com/blog/mathematics/katex-a-new-way-to-display-math-on-the-web-9445
+		http://tiddlywiki.com/plugins/tiddlywiki/katex/
+		 --><link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
+		<script  type="text/javascript" src="katex/katex.min.js"></script>
+		
+		<!-- script for Matrices etc. -->
+		<script type="text/javascript" src="math.js"></script>
+		
+		<!-- RequireJS is a JavaScript file and module loader.-->
+		<script type="text/javascript" src="require.js"></script>
+		
+		<!-- load symblic scripts-->
+		<script  type="text/javascript" src="symbolic/nerdamer.core.js"></script> 
+		<script  type="text/javascript" src="symbolic/Algebra.js"></script>
+		<script  type="text/javascript" src="symbolic/Calculus.js"></script>
+		
+		<!-- logic for this website -->
+		<script type="text/javascript" src="page8.js"></script>
+		
+		<!-- Load css sheet -->
+		<link rel="stylesheet" type="text/css" href="page8.css" />
+    </head>
+	
+	
+    <body>	
+	
+		<!-- Überschriften: -->
+		<div id="container"> 
+		<div id="linkeBox"><h1> Denavit Hartenberg Converter </h1> </div>
+		<div id="rechteBox"><h1> Explanation of the Denavit Hartenberg Converter  </h1> </div>
+		</div><!-- /#container -->
+		<!-- hebt später die floats auf -->
+		<div class="clearer"></div>
+	
+		<!-- das ist die horizontale Überschrifts Linie -->
+		<div id="linie"><hr class="linie" > </div>
+ 
+ 
+ 
+		<!-- Hauptcontainer-->
+ 		<div id="Hauptcontainer">
+		<div id="Hlinks">
+			<h2> Input: </h2> 
+ 
+ 
+		<!-- Haupteingabe Text: -->
+	 <textarea rows="6" cols="36" type="text" id ="Gleichung"> i | theta_i | d_i | a_i | alpha_i |
+---------------------------------------
+ 1 | 0       | q1 |  0  | -pi/2    |
+ 2 | q2     | 0   | la  | 0         |
+ 3 | 0       | q3 |  0  | pi/2     |
+    </textarea>
+	
+	<!-- Buton zur Berechnung: -->
+	<button class="button" id="button_Gleichung" onclick="berechneDH()">Calculate 0Tn Matrix</button>
+		
+		<h2> Output: </h2> 
+	<!-- Hier werden die Latex Formeln hinten angehängt-->
+	<div id ="eq" class="equation" data-expr=""></div>
+	
+		
+ </div>
+ 
+ 
+	<div id="Hrechts">
+		<h2>Short: </h2> 
+		
+		<p>"The Denavit–Hartenberg parameters (also called DH parameters) 
+		are the four parameters(theta, d, a, alpha) associated with a particular convention
+		for attaching reference frames to the links of a spatial kinematic chain, or robot manipulator." </p>
+		<a href="https://en.wikipedia.org/wiki/Denavit%E2%80%93Hartenberg_parameters">for more see wikipedia</a>
+		
+		
+		<h2>Exapmle:</h2> 
+		<p>In the table on the left just enter your DH parameters line by line and seperate two parameters by a "|". Then click the Button
+		and wait for around <strong>20sec</strong> until your solution is calculated. The advantage of the left table is that you can first calculate
+		your homogen Transformation matrices with symbols and then just replace your symbols with numbers or pi btw. pi/2 etc. and you have a concret 
+		solution.
+		<br><br>The homogen transformation Matrix that is calculated looks as follows:</p>
+		<img src="img/DH1.png">
+		<p> <br> <br>Links passt die Linie noch nicht zu Bilder und zu Latex generierten dingen: </p>
+		<div id ="equationsright" class="equation" data-expr=""></div>
+		<script>katex.render("{}^{i-1}T_{i} = Rot(theta,z)*Trans(d,z)*Rot(alpha,x)*Trans(a,x)", equationsright);</script> 
+	</div>
+
+
+	 </div><!-- Ende Hauptcontainer -->
+	 
+	 <div class="clearer"></div>
+
+	  <div id="linie"><hr class="linie" > </div>
+	  
+	  <!-- Hintergrundwissen -->
+	  <div class="Hintergrundwissen">
+	  <h2> Hier steht das Hintergrundwissen</h2> 
+	  </div>
+
+	  <div id="linie"><hr class="linie" > </div>
+	  
+	  <!-- Footer -->
+	  <div class="footer">
+	  <h2>Footer</h2> 
+	  </div>
+	  
+    </body>
+	
+</html>     
