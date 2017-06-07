@@ -11,12 +11,15 @@ var uselocalStorage = false;
 
 // Sobald Basis Website aufgebaut (DOM Elements loaded) wird diese Methode ausgführt:
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("The program loads data from a file into the local storage and uses the local storage to build your data")
+    console.log("If you want to save your page please click get Data of Storage and copy the content in your file that is sotred on your server")
 
     //0. when Document reloaded basic fill in fields:
     //standardFillAddFields(); <- Funktion wird nicht mehr gebraucht!
 
     //1. Speichere  in data: alle Objekte des LocalStorage
     if(uselocalStorage) {
+        console.log("local storage is empty yet")
         if (localStorage.tblData) {
             data = JSON.parse(localStorage.tblData);
             datalength = data.length;
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     },10);
 
+
 }, false);
 
 function readFile(file){
@@ -49,13 +53,13 @@ function readFile(file){
         data = txtdata;
         localStorage.tblData = JSON.stringify(data);
        // console.log(localStorage.tblData)
-
-        if (localStorage.tblData) {
-            data = JSON.parse(localStorage.tblData);
-            datalength = data.length;
-        }
-        //console.log(data); console.log(datalength);
     });
+
+    if (localStorage.tblData) { // das muss hier nochmal ausgeführt werden!! sehr wichtig!
+        data = JSON.parse(localStorage.tblData);
+        datalength = data.length;
+    }
+
 }
 
 function buildWebsiteContent(index) {
@@ -490,11 +494,11 @@ function add_click(id) {
             + `<input id="addK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + "neue Kategorie1" + `"    onclick="addK1(` + id + `)">`
             + `<h2 id="addNewItem">Structure of Items: </h2> `
             + `<select  id="AddselectTable` + id + `" onchange="">
-																												<option value="Table(1x1)">Table (1 x 1)</option>
-																												<option value="Table(1x2)">Table (1 x 2)</option>
-																												<option value="Table(1x3)">Table (1 x 3)</option>
-																												<option value="Table(1x5)">Table (1 x 5)</option>
-																											</select>` // onchange=selectChange() anpassen hierfür!!!
+                                                                                                                <option value="Table(1x1)">Table (1 x 1)</option>
+                                                                                                                <option value="Table(1x2)">Table (1 x 2)</option>
+                                                                                                                <option value="Table(1x3)">Table (1 x 3)</option>
+                                                                                                                <option value="Table(1x5)">Table (1 x 5)</option>
+                                                                                                            </select>` // onchange=selectChange() anpassen hierfür!!!
             + `<div id="addlinie"><hr class="liniebox" > </div>`
 
             + `<div id="content_adder` + id + `">`
@@ -528,11 +532,11 @@ function build_Changer(dataobject, id) {
             + `<input id="changeK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + dataobject["kat1"] + `"    onclick="changeK1(` + id + `)">`
             + `<h2 id="addNewItem">Structure of Items: </h2> `
             + `<select  id="selectTable" onchange="">
-																												<option value="Table(1x1)">Table (1 x 1)</option>
-																												<option value="Table(1x2)">Table (1 x 2)</option>
-																												<option value="Table(1x3)">Table (1 x 3)</option>
-																												<option value="Table(1x5)">Table (1 x 5)</option>
-																											</select>` // onchange=selectChange() anpassen hierfür!!!
+                                                                                                                <option value="Table(1x1)">Table (1 x 1)</option>
+                                                                                                                <option value="Table(1x2)">Table (1 x 2)</option>
+                                                                                                                <option value="Table(1x3)">Table (1 x 3)</option>
+                                                                                                                <option value="Table(1x5)">Table (1 x 5)</option>
+                                                                                                            </select>` // onchange=selectChange() anpassen hierfür!!!
             + `<div id="addlinie"><hr class="liniebox" > </div>`
 
             + `<div id="content_changer` + id + `">`

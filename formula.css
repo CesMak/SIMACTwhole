@@ -5,7 +5,8 @@
 #container {
     display: block;
     margin: 0 auto;
-    width: 1366px;
+    /*width: 1366px;*/
+       width: auto;
     background: #eafaea;
     text-align: center;
 }
@@ -15,7 +16,8 @@
     border-top: 3px solid #737373;
     background-color: #FFFFFF;
     margin: 0px 0px 0px 0px;
-    width: 1366px;
+    /*width: 1366px;*/
+       width: auto;
     /* margin-left:px; */
     padding: 0px; /* Platz nach unten*/
 }
@@ -25,27 +27,31 @@
     border-top: 1px solid #C0C0C0;
     height: 1px;
     margin: 0px 0px 0px 0px;
-    width: 1295px;
+  /*  width: 1295px;*/
+    width: auto;
     padding: 5px; /* Platz nach unten*/
 }
 
 /* Hauptinhaltbox: */
 #Hauptcontainer {
-    margin: 0px 30px 0px 30px; /* top right bottomn left */
-    width: 1306px;
+    margin: 0px 10px 0px 10px; /* top right bottomn left */
+    /* width: 1306px;*/
+    width: auto;
     text-align: center;
     vertical-align: top;
 }
 
 #addContent {
-    width: 1270px;
+   /* width: 1270px; */
+    width: auto;
     vertical-align: top;
     text-align: left;
 }
 
 .Containerbox {
-    float: left;
-    width: 1306px; /* ist variabel - soll auch nur halb so groß möglich sein!? */
+    float: center;
+    width: 95vw;
+    /*width: 1306px;  ist variabel - soll auch nur halb so groß möglich sein!? */
     text-align: left;
     margin: 50px 0px 10px 0px; /* // abstand nach oben */
     /* border-right: 2px solid #e8e8e8;/*  mittel linie! */
@@ -55,8 +61,9 @@
 }
 
 .Standardtbox {
-    float: left;
-    width: 1306px; /* ist variabel - soll auch nur halb so groß möglich sein!? */
+    float: center;
+    width: 95vw;
+   /* width: 1306px;  ist variabel - soll auch nur halb so groß möglich sein!? */
     text-align: left;
     margin: 10px 0px 10px 0px; /* Standardt Box Abstand nach oben. */
     /* border-right: 2px solid #e8e8e8;/*  mittel linie! */
@@ -187,7 +194,7 @@ li {
 
 #Hlinks {
     float: left;
-    width: 643px;
+    width: 50vw;
     text-align: left;
     margin: 0px 10px 0px 0px;
     border-right: 2px solid #e8e8e8; /* mittel linie! */
@@ -196,25 +203,25 @@ li {
 
 #Hrechts {
     float: right;
-    width: 641px; /*30 pixel weniger wegen 30px abstand zum linken rand */
+    width: 50vw; /*30 pixel weniger wegen 30px abstand zum linken rand */
     text-align: left;
     margin: 0px 0px 0px 10px;
 }
 
 .Hintergrundwissen {
-    width: 1366px;
+    width: auto;
     text-align: center;
 }
 
 body {
     background: #eafaea; /* background color, Hintergrund bild, dass sich auf horizontaler Ebene wiederholt */
     color: #333333;
-    margin: 10px 0px 0px 0px; /* äußerrer Abstand */
+    margin: 10px 0px 10px 0px; /* äußerrer Abstand */
     padding: 0; /* innerer Abstand */
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     /* font: 100%/1.5 'lucida grande', verdana, sans-serif;  /* Der Wert von 100% bezieht sich auf die Schriftgröße. Der Wert 1.5 bezieht sich auf die Zeilenhöhe und diese beträgt das 1,5-fache der Schriftgröße.  */
     text-align: center; /* Zentriert den Inhalt für ältere Browser */
-    width: 1366px;
+    width: auto;
     margin-left: auto; /* wichtig für center skalierung! */
     margin-right: auto;
 
@@ -228,7 +235,7 @@ body {
 }
 
 .footer {
-    width: 1366px;
+    width: auto;
     text-align: center;
 }
 
@@ -273,17 +280,17 @@ body {
     color: #68D3F7;
 }
 
-/* visited link 
+/* visited link
 a:visited {
     color: #1d17cf;
 }
 
-/* mouse over link 
+/* mouse over link
 a:hover {
     color:#1d17cf;
 }
 
-/* selected link 
+/* selected link
 a:active {
     color: #1d17cf;
 } */
