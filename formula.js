@@ -6,6 +6,8 @@ var datalength = 0; //anzahl der containerboxen
 var formelnummer = 0; //wir zum builden und numeriern der id von den formeln benutzt beim builden des contents.
 var uselocalStorage = false;
 var input_file = "";
+var load_once =true // load file only once!
+
 // erster Schritt: lade alle Daten des Local storage in data
 // baue mit den Daten in data die komplette Website!
 
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         readFile(input_file+".jason");
     }
 
+
     // wait some time until readFile is completely read in before
     // building content:
     setTimeout(function() {
@@ -45,10 +48,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     },10);
 
-
 }, false);
 
 function readFile(file){
+    if (sessionStorage.getItem("is_reloaded")){
+
+        alert('Reloaded!');
+    }
+    else{
+                sessionStorage.setItem("is_reloaded", true);
+    }
+
     console.log("READ IN DATA FROM this file: "+file);
     d3.json(file, function(txtdata) {
        //console.log(txtdata[0]);
