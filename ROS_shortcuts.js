@@ -5,7 +5,7 @@ var data = []; //hier stehen die daten drinnen mit denen die Website gebaut wird
 var datalength = 0; //anzahl der containerboxen
 var formelnummer = 0; //wir zum builden und numeriern der id von den formeln benutzt beim builden des contents.
 var uselocalStorage = false;
-var input_file = "";
+
 // erster Schritt: lade alle Daten des Local storage in data
 // baue mit den Daten in data die komplette Website!
 
@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     else{
-        //console.log(document.getElementById("headline").innerHTML);
-        input_file = document.getElementById("headline").innerHTML;
-        readFile(input_file+".jason");
+        readFile("data.jason");
     }
 
     // wait some time until readFile is completely read in before

@@ -44,8 +44,8 @@
     <script  type="text/javascript" src="symbolic/Calculus.js"></script>
      -->
 
-    <!-- logic for this website -->
-    <script type="text/javascript" src="formula.js"></script>
+    <!-- logic for this website
+    <script type="text/javascript" src="formula.js"></script>-->
 
     <!-- online sources for ausblenden Funktion -->
     <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -69,8 +69,13 @@
 <body>
 
 <!-- Überschriften: -->
-<div id="container"><h1>Formelsammlung</h1>             <button id="bt1" onclick="get_Data_of_Storage()">get_Data_of_Storage</button>
+<!-- headline and .data file should have the same name! -->
+<!-- then alwayse the same formula.js can be used! -->
+<div id="container"><h1 id="headline">data</h1>             <button id="bt1" onclick="get_Data_of_Storage()">get_Data_of_Storage</button>
 </div><!-- /#container -->
+
+<!-- logic for this website -->
+<script type="text/javascript" src="formula.js"></script>
 
 <!-- das ist die horizontale Überschrifts Linie -->
 <div id="linie">

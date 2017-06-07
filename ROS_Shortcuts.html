@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Formeln</title>
+
+    <!-- include Highcharts: --><!--
+		<script  type="text/javascript" src="HighCharts/code/highcharts.js"></script> 
+		<script type="text/javascript" src="HighCharts/js/themes/gray.js"></script> -->
+
+    <!-- required for read in textfile: -->
+    <script type="text/javascript" src="libs/d3/d3.js"></script>
+
+    <!-- KATEX-Latex fast rendering: and information sites:
+    http://willdrevo.com/latex-equation-rendering-in-javascript-with-jekyll-and-katex/
+    http://www.intmath.com/blog/mathematics/katex-a-new-way-to-display-math-on-the-web-9445
+    http://tiddlywiki.com/plugins/tiddlywiki/katex/		 -->
+
+    <!-- Katex offline source:  -->
+    <link rel="stylesheet" type="text/css" href="libs/katex/katex.min.css"/>
+    <script type="text/javascript" src="libs/katex/katex.min.js"></script>
+    <!-- Schau dir nochmal angular JS an warum geht das bei mir nicht?! http://jsbin.com/gatosifepe/edit?html,css,js,output -->
+
+
+    <!-- script for Matrices etc. -->
+    <!-- <script type="text/javascript" src="math.js"></script>
+     -->
+
+    <!-- RequireJS is a JavaScript file and module loader.-->
+    <script type="text/javascript" src="libs/require.js"></script>
+
+    <!-- load symblic scripts-->
+    <!-- <script  type="text/javascript" src="symbolic/nerdamer.core.js"></script>
+    <script  type="text/javascript" src="symbolic/Algebra.js"></script>
+    <script  type="text/javascript" src="symbolic/Calculus.js"></script>
+     -->
+
+    <!-- online sources for ausblenden Funktion -->
+    <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+    <!-- online sources for ausblenden Funktion -->
+    <link rel="stylesheet" href="libs/collapse/bootstrap.min.css">
+    <script type="text/javascript" src="libs/collapse/jquery.min.js"></script>
+    <script type="text/javascript" src="libs/collapse/bootstrap.min.js"></script>
+
+    <!-- JQuerry wird genutzt für local storage... -Ist in meinem angepassten code nicht nötig! -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+
+    <!-- Load css sheet  Es ist wichtig dass dies am Ende des Head steht!-->
+    <link rel="stylesheet" type="text/css" href="formula.css"/>
+
+</head>
+
+
+<body>
+
+<!-- Überschriften: -->
+<!-- headline and .data file should have the same name! -->
+<!-- then alwayse the same formula.js can be used! -->
+<div id="container"><h1 id="headline">ROS-Shortcuts</h1>             <button id="bt1" onclick="get_Data_of_Storage()">get_Data_of_Storage</button>
+</div><!-- /#container -->
+
+<!-- logic for this website -->
+<script type="text/javascript" src="formula.js"></script>
+
+<!-- das ist die horizontale Überschrifts Linie -->
+<div id="linie">
+    <hr class="linie">
+</div>
+
+<!-- Hauptcontainer-->
+<div id="Hauptcontainer">
+
+    <!-- Platzhalter hiernach werden die anderen Containerboxen eingefügt! -->
+    <div id="Containerboxstandart2" class="Standardtbox"></div>
+
+</div><!-- Ende Hauptcontainer -->
+
+<div class="clearer"></div>
+
+<div id="linie">
+    <hr class="linie">
+</div>
+
+<!-- Footer -->
+<div class="footer">
+
+
+</div>
+</body>
+
+
+</html>
