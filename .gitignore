@@ -3,4 +3,5 @@
 *.creator
 *.files
 *.includes
+*.user
 index.html
