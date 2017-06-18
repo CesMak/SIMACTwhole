@@ -51,34 +51,38 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 function readFile(file){
-    if (sessionStorage.getItem("is_reloaded")){
+    //TODO: does not work properly:
+    //    setTimeout(function() {
+    //        get_Data_of_Storage();
+    //        console.log(localStorage.tblData);
+    //    },100);
 
-        alert('Reloaded!');
+    if (sessionStorage.getItem("is_reloaded")){
+        //reload =  reload_page();
     }
     else{
-                sessionStorage.setItem("is_reloaded", true);
+        sessionStorage.setItem("is_reloaded", true);
     }
 
     console.log("READ IN DATA FROM this file: "+file);
     d3.json(file, function(txtdata) {
-       //console.log(txtdata[0]);
+        //console.log(txtdata[0]);
         data = txtdata;
         localStorage.tblData = JSON.stringify(data);
-       // console.log(localStorage.tblData)
+        // console.log(localStorage.tblData)
     });
 
     if (localStorage.tblData) { // das muss hier nochmal ausgeführt werden!! sehr wichtig!
         data = JSON.parse(localStorage.tblData);
         datalength = data.length;
     }
-
 }
 
 function buildWebsiteContent(index) {
     // wichtig wird eine neue Contentbox hinzugefügt müssen alle elemente neu gebuildet werden, da sich deren reihenfolge geändert hat.... bzw. ist das ersteinmal der einfachste WEg!
 
     if (typeof data[index] == "undefined") {
-        alert("the data you wanna build is not possible because data[" + index + "]does not exist")
+        alert("the data you wanna build is not possible because data[" + index + "]does not exist");
     } else {
         var gibts_denIndex_schon = document.getElementById("Containerbox" + data[index]["id"]);
 
@@ -118,7 +122,7 @@ function build_Content(id, content) {
 
 function create(htmlStr) {
     var frag = document.createDocumentFragment(),
-        temp = document.createElement('div');
+            temp = document.createElement('div');
     temp.innerHTML = htmlStr;
     while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
@@ -158,6 +162,8 @@ function parse(id, content) {
     content = ersetze_alles_zwischen(content, "-h3(", ")");
 
     content = ersetze_alles_zwischen(content, "-l(", ")"); //list
+
+    content = ersetze_alles_zwischen(content, "-t(", ")"); //table
 
     content = ersetze_alles_zwischen(content,"-c(",")"); // code just place kursive and in the middle in another color.
 
@@ -205,10 +211,59 @@ function ersetze_list(content) {
     return srr;
 }
 
+function ersetze_table(content) {  //-t(...)
+    var srr = content;
+    //" -l(Hier die überschrift --Punkt 1    --Punkt2 --Punkt3) -> -n ";
+    console.log(srr);
+    var position = srr.indexOf("--");
+    var position2= srr.indexOf("-.");
+    var zaehler = 0;
+    while(position2>0){
+        srr = replaceStringAt(srr, position2, "</tr><tr>", "-.");
+        position2= srr.indexOf("-.");
+    }
+
+    // var lines = 0;
+    //console.log(getFromBetween.get(content,"--","--"));
+    var position3= srr.indexOf("</tr><tr>");
+    while (position > 0) {
+
+        if(position<position3){
+        if (zaehler == 0) {
+            srr = replaceStringAt(srr, position, "<tr><th>", "--");
+            zaehler = zaehler + 1;
+        } else if (zaehler >= 1) {
+            srr = replaceStringAt(srr, position, "</th> <th>", "--");
+            //zaehler --;
+        }
+    }
+        if(position>position3){
+            if (zaehler == 0) {
+                srr = replaceStringAt(srr, position, "<tr><td>", "--");
+                zaehler = zaehler + 1;
+            } else if (zaehler >= 1) {
+                srr = replaceStringAt(srr, position, "</td> <td>", "--");
+                //zaehler --;
+            }
+        }
+
+        console.log(srr);
+        position = srr.indexOf("--");
+    }
+      var position3= srr.indexOf("</tr><tr>");
+
+
+
+    console.log(srr);
+    return srr;
+} /* -t( --halo --sowas --hallo ich hbasgeschafft
+-. --markus --ich --markus -. --1 --2 --3 -. --4 --5 --6)
+*/
+
 function ersetze_direkt(content, das_wird_ersetzt) {
     if (das_wird_ersetzt == "-n") {
         content = content.replaceAll("-n", "<br>");
-       // console.log(content);
+        // console.log(content);
     }
     if (das_wird_ersetzt == "-line") {
         content = content.replaceAll("-line", ` <hr class="liniebox" >`);
@@ -301,6 +356,10 @@ function ersetze_alles_zwischen(content, zwischen1, zwischen2) {
             }
             if (zwischen1 == "-l(" && zwischen2 == ")") { // list
                 var div_of_formel = `<ul id="ul_` + formelnummer + `">` + ersetze_list(dazwischen) + `</li></ul>`;
+                console.log(div_of_formel);
+            }
+            if (zwischen1 == "-t(" && zwischen2 == ")") { // list
+                var div_of_formel = `<table id="table_` + formelnummer + `">` + ersetze_table(dazwischen) + `</tr></table>`;
                 console.log(div_of_formel);
             }
             if (zwischen1 == "-c(" && zwischen2 == ")") { // code
@@ -411,7 +470,7 @@ var getFromBetween = {
             this.getAllResults(sub1, sub2);
             //console.log("more substrings");
         } else
-        //console.log("Fall ist eingetreten!"+sub1);
+            //console.log("Fall ist eingetreten!"+sub1);
             return;
     },
     get: function (string, sub1, sub2) {
@@ -501,74 +560,76 @@ function add_click(id) {
         insertAfter(add_box, div);
 
         var add_fragments = create(`<h2 id="AddItem` + id + `">Add new Item (` + parseInt(data.length + 1) + `)</h2>`
-            + ` <input id="addUe` + id + `" class="addUe" type="text" name="Ueberschrift" value="` + "neueÜberschrift" + `" onclick="addUe(` + id + `)">`
-            + `<input id="addK2` + id + `" class="addK2" type="text" name="Kategorie2" value="` + "neue Kategorie2" + `"    onclick="addK2(` + id + `)">`
-            + `<input id="addK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + "neue Kategorie1" + `"    onclick="addK1(` + id + `)">`
-            + `<h2 id="addNewItem">Structure of Items: </h2> `
-            + `<select  id="AddselectTable` + id + `" onchange="">
-                                                                                                                <option value="Table(1x1)">Table (1 x 1)</option>
-                                                                                                                <option value="Table(1x2)">Table (1 x 2)</option>
-                                                                                                                <option value="Table(1x3)">Table (1 x 3)</option>
-                                                                                                                <option value="Table(1x5)">Table (1 x 5)</option>
-                                                                                                            </select>` // onchange=selectChange() anpassen hierfür!!!
-            + `<div id="addlinie"><hr class="liniebox" > </div>`
+                                   + ` <input id="addUe` + id + `" class="addUe" type="text" name="Ueberschrift" value="` + "neueÜberschrift" + `" onclick="addUe(` + id + `)">`
+                                   + `<input id="addK2` + id + `" class="addK2" type="text" name="Kategorie2" value="` + "neue Kategorie2" + `"    onclick="addK2(` + id + `)">`
+                                   + `<input id="addK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + "neue Kategorie1" + `"    onclick="addK1(` + id + `)">`
+                                   + `<h2 id="addNewItem">Structure of Items: </h2> `
+                                   + `<select  id="AddselectTable` + id + `" onchange="">
+                                   <option value="Table(1x1)">Table (1 x 1)</option>
+                                   <option value="Table(1x2)">Table (1 x 2)</option>
+                                   <option value="Table(1x3)">Table (1 x 3)</option>
+                                   <option value="Table(1x5)">Table (1 x 5)</option>
+                                   </select>` // onchange=selectChange() anpassen hierfür!!!
+                                   + `<div id="addlinie"><hr class="liniebox" > </div>`
 
-            + `<div id="content_adder` + id + `">`
-            + `<textarea id="addTextArea` + id + `" type="text">` + "" + `</textarea> ` // TODO hier noch ändern je nachdem wie viele tables enthalten
-            + `<style>  #addTextArea` + id + ` {width: 1200px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px;} </style>` // style your tables!
-            + `</div>`
+                                   + `<div id="content_adder` + id + `">`
+                                   + `<textarea id="addTextArea` + id + `" type="text">` + "" + `</textarea> ` // TODO hier noch ändern je nachdem wie viele tables enthalten
+                                   + `<style>  #addTextArea` + id + ` {width: 1200px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px;} </style>` // style your tables!
+                                   + `</div>`
 
-            + `<br> `
-            + `<button id="SaveButton" onclick="save_Add(` + urspid + "," + "AddBox" + id + `)" class="addSaveButton">Save new Item</button>`);
+                                   + `<br> `
+                                   + `<button id="SaveButton" onclick="save_Add(` + urspid + "," + "AddBox" + id + `)" class="addSaveButton">Save new Item</button>`);
 
-        var position = document.getElementById("AddBox" + id);
-        position.insertBefore(add_fragments, position.childNodes[0]);
+                                   var position = document.getElementById("AddBox" + id);
+                                   position.insertBefore(add_fragments, position.childNodes[0]);
 
-    } else {
-        alert("Es gibt die AddBox zur " + parseInt(id + 1) + " schon");
-    }
-}
+    } //end of if
+                                   else {
+                                       alert("Es gibt die AddBox zur " + parseInt(id + 1) + " schon");
+                                   }
 
-function build_Changer(dataobject, id) {
-    var gibts_die_Changer_Box_zur_id_schon = document.getElementById("ChangerBox" + id);
-    if (gibts_die_Changer_Box_zur_id_schon == null) {
-        var changer_box = document.createElement("DIV");
-        changer_box.setAttribute("id", "ChangerBox" + id);
-        changer_box.setAttribute("class", "Containerbox");
-        var div = document.getElementById("Containerbox" + id);
-        insertAfter(changer_box, div);
-        //deleteElementbyname("ChangerBox36");
+    } //end of function
 
-        var changer_fragments = create(`<h2 id="ChangeItem` + id + `">Change Item (` + id + `)</h2> <input id="changeUe` + id + `" class="addUe" type="text" name="Ueberschrift" value="` + dataobject["ue"] + `" onclick="changeUe(` + id + `)">`
-            + `<input id="changeK2` + id + `" class="addK2" type="text" name="Kategorie2" value="` + dataobject["kat2"] + `"    onclick="changeK2(` + id + `)">`
-            + `<input id="changeK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + dataobject["kat1"] + `"    onclick="changeK1(` + id + `)">`
-            + `<h2 id="addNewItem">Structure of Items: </h2> `
-            + `<select  id="selectTable" onchange="">
-                                                                                                                <option value="Table(1x1)">Table (1 x 1)</option>
-                                                                                                                <option value="Table(1x2)">Table (1 x 2)</option>
-                                                                                                                <option value="Table(1x3)">Table (1 x 3)</option>
-                                                                                                                <option value="Table(1x5)">Table (1 x 5)</option>
-                                                                                                            </select>` // onchange=selectChange() anpassen hierfür!!!
-            + `<div id="addlinie"><hr class="liniebox" > </div>`
+                                   function build_Changer(dataobject, id) {
+                                       var gibts_die_Changer_Box_zur_id_schon = document.getElementById("ChangerBox" + id);
+                                       if (gibts_die_Changer_Box_zur_id_schon == null) {
+                                           var changer_box = document.createElement("DIV");
+                                           changer_box.setAttribute("id", "ChangerBox" + id);
+                                           changer_box.setAttribute("class", "Containerbox");
+                                           var div = document.getElementById("Containerbox" + id);
+                                           insertAfter(changer_box, div);
+                                           //deleteElementbyname("ChangerBox36");
 
-            + `<div id="content_changer` + id + `">`
-            + `<textarea id="changeTextArea` + id + `" type="text">` + dataobject["Content1"] + `</textarea> ` // TODO hier noch ändern je nachdem wie viele tables enthalten
-            + `<style>  #changeTextArea` + id + ` {width: 1200px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px;} </style>` // style your tables!
-            + `</div>`
+                                           var changer_fragments = create(`<h2 id="ChangeItem` + id + `">Change Item (` + id + `)</h2> <input id="changeUe` + id + `" class="addUe" type="text" name="Ueberschrift" value="` + dataobject["ue"] + `" onclick="changeUe(` + id + `)">`
+                                                                          + `<input id="changeK2` + id + `" class="addK2" type="text" name="Kategorie2" value="` + dataobject["kat2"] + `"    onclick="changeK2(` + id + `)">`
+                                                                          + `<input id="changeK1` + id + `" class="addK1" type="text" name="Kategorie1" value="` + dataobject["kat1"] + `"    onclick="changeK1(` + id + `)">`
+                                                                          + `<h2 id="addNewItem">Structure of Items: </h2> `
+                                                                          + `<select  id="selectTable" onchange="">
+                                                                          <option value="Table(1x1)">Table (1 x 1)</option>
+                                                                          <option value="Table(1x2)">Table (1 x 2)</option>
+                                                                          <option value="Table(1x3)">Table (1 x 3)</option>
+                                                                          <option value="Table(1x5)">Table (1 x 5)</option>
+                                                                          </select>` // onchange=selectChange() anpassen hierfür!!!
+                                                                          + `<div id="addlinie"><hr class="liniebox" > </div>`
 
-            + `<br> `
-            + `<button id="SaveButton" onclick="deleteElementbyname(` + "ChangerBox" + id + `)">End editing</button>`
-            + `<button id="SaveButton" onclick="save_Changes(` + id + `)">Save Changes  </button>`);
+                                                                          + `<div id="content_changer` + id + `">`
+                                                                          + `<textarea id="changeTextArea` + id + `" type="text">` + dataobject["Content1"] + `</textarea> ` // TODO hier noch ändern je nachdem wie viele tables enthalten
+                                                                          + `<style>  #changeTextArea` + id + ` {width: 1200px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px;} </style>` // style your tables!
+                                                                          + `</div>`
 
-        var position = document.getElementById("ChangerBox" + id);
-        position.insertBefore(changer_fragments, position.childNodes[0]);
+                                                                          + `<br> `
+                                                                          + `<button id="SaveButton" onclick="deleteElementbyname(` + "ChangerBox" + id + `)">End editing</button>`
+                                                                          + `<button id="SaveButton" onclick="save_Changes(` + id + `)">Save Changes  </button>`);
 
-    } else {
-        alert("Es gibt die ChangerBox zur " + id + " schon");
-    }
+                                                                          var position = document.getElementById("ChangerBox" + id);
+                                                                          position.insertBefore(changer_fragments, position.childNodes[0]);
 
-    // obiger Code wenn if erfüllt erzeugt:
-    /* <div id="ChangerBox36" class="Containerbox">
+                                       } else {
+                                                                              alert("Es gibt die ChangerBox zur " + id + " schon");
+                                                                          }
+
+                                                                          // obiger Code wenn if erfüllt erzeugt:
+                                                                          /* <div id="ChangerBox36" class="Containerbox">
      <h2 id="ChangeItem36">Change Item (36)</h2>
      <input id="changeUe36" class="addUe" name="Ueberschrift" value="andere überschrift" onclick="changeUe(36)" type="text">
      <input id="changeK236" class="addK2" name="Kategorie2" value="andere kat2" onclick="changeK2(36)" type="text">
@@ -589,363 +650,364 @@ function build_Changer(dataobject, id) {
      <button id="SaveButton" onclick="save_Changes(36)">Save Changes</button>
      <button id="endEditingButton" onclick="deleteElement([object HTMLDivElement])">end Editing</button>
      </div> */
-}
-
-function deleteElement(delteting_Element) {
-    var element = delteting_Element;
-    element.outerHTML = "";
-    delete element;
-}
-
-function deleteElementbyname(name) {
-    var element = name;
-    element.outerHTML = "";
-    delete element;
-}
-
-function deleteallwithin(node) {
-    //var node = document.getElementById("addContent");
-    while (node.hasChildNodes()) {
-        node.removeChild(node.lastChild);
-    }
-}
-
-// create function, it expects 2 values.
-function insertAfter(newElement, targetElement) {
-    // target is what you want it to go after. Look for this elements parent.
-
-    //console.log(targetElement); // el.parentNode
-
-    if (targetElement == null) { // das passiert wenn nur das Standardt Element drinnen ist!
-        targetElement = document.getElementById("Containerboxstandart2");
-    }
-    var parent = targetElement.parentNode;
-
-    // if the parents lastchild is the targetElement...
-    if (parent.lastChild == targetElement) {
-        // add the newElement after the target element.
-        parent.appendChild(newElement);
-    } else {
-        // else the target has siblings, insert the new element between the target and it's next sibling.
-        parent.insertBefore(newElement, targetElement.nextSibling);
-    }
-}
-
-function build_Head(id, ue, kat1, kat2, neuer_Head_nach_hier, name_neue_container_box) {
-
-    // Build containerbox+id nach neuer_Head_nach_hier
-    var containerbox = document.createElement("DIV");
-    containerbox.setAttribute("id", name_neue_container_box + id);
-    containerbox.setAttribute("class", "Containerbox");
-    var div = document.getElementById(neuer_Head_nach_hier);
-    insertAfter(containerbox, div);
-
-    // Nichts verändern bei 2. und 1!
-
-    //2. Adde [Bearbeiten,....]
-    //<a href="#divcontent36" data-toggle="collapse" class="" aria-expanded="true"> Ausbldenden</a>
-    //<h3>[Bearbeiten, <a href="#content1" data-toggle="collapse"> Ausbldenden</a>, Markieren(z.B. für FS erstellun etc.),Felder bewegen(bilder verschieben, formeln verschieben etc.)]       HIer noch youtube link, wiki link etc machen!</h3>
-    var fragment_h3 = create(`<h3>[<a id=` + id + ` href="javascript:add_click(` + id + `)">Add</a>,  <a id=` + id + ` href="javascript:bearbeiten_click(` + id + `)">Edit</a>,  <a href="` + "#divcontent" + id + `" data-toggle="collapse"> Collapse</a>` + ",  " + `<a id=` + id + ` href="javascript:delete_click(` + id + `)">Delete</a>` + "]" + "</h3>");
-
-    var position = document.getElementById(name_neue_container_box + id); //var tex = document.getElementById("eqadddd"); 	//document.getElementById("eqadddd").setAttribute("dd", "hallo");
-    position.insertBefore(fragment_h3, position.childNodes[1]); //	katex.render(String.raw `${formel}`, tex);
+                                       } // end of function
 
 
-    //1. Adde Überschrift
-    var fragment_h2 = create(`<h1 id="unterüberschrift_h2_` + id + `"> ` + ue + `</h1>`);
+                                                                          function deleteElement(delteting_Element) {
+                                                                              var element = delteting_Element;
+                                                                              element.outerHTML = "";
+                                                                              delete element;
+                                                                          }
 
-    var position = document.getElementById(name_neue_container_box + id); //var tex = document.getElementById("eqadddd"); 	//document.getElementById("eqadddd").setAttribute("dd", "hallo");
-    position.insertBefore(fragment_h2, position.childNodes[0]); //	katex.render(String.raw `${formel}`, tex);
+                                                                          function deleteElementbyname(name) {
+                                                                              var element = name;
+                                                                              element.outerHTML = "";
+                                                                              delete element;
+                                                                          }
 
-    //3. Add Kategorie 1 und Kategorie 2:
-    var kategorie2 = document.createElement("H4");
-    var kategorie2_content = document.createTextNode(kat2);
-    kategorie2.setAttribute("id", "kategorie2_" + id);
-    kategorie2.appendChild(kategorie2_content);
-    document.getElementById(name_neue_container_box + id).appendChild(kategorie2);
+                                                                          function deleteallwithin(node) {
+                                                                              //var node = document.getElementById("addContent");
+                                                                              while (node.hasChildNodes()) {
+                                                                                  node.removeChild(node.lastChild);
+                                                                              }
+                                                                          }
 
-    var strich = document.createElement("H4");
-    var strichcont = document.createTextNode("_|_");
-    strich.appendChild(strichcont);
-    document.getElementById(name_neue_container_box + id).appendChild(strich);
+                                                                          // create function, it expects 2 values.
+                                                                          function insertAfter(newElement, targetElement) {
+                                                                              // target is what you want it to go after. Look for this elements parent.
 
-    var kategorie1 = document.createElement("H4");
-    var kategorie1_content = document.createTextNode(kat1);
-    kategorie1.setAttribute("id", "kategorie1_" + id);
-    kategorie1.appendChild(kategorie1_content);
-    document.getElementById(name_neue_container_box + id).appendChild(kategorie1);
+                                                                              //console.log(targetElement); // el.parentNode
 
-    //4. Add linie:
-    var linie = document.createElement("HR");
-    linie.setAttribute("class", "liniebox");
-    document.getElementById(name_neue_container_box + id).appendChild(linie);
-}
+                                                                              if (targetElement == null) { // das passiert wenn nur das Standardt Element drinnen ist!
+                                                                                  targetElement = document.getElementById("Containerboxstandart2");
+                                                                              }
+                                                                              var parent = targetElement.parentNode;
 
-function standardFillAddFields() {
-    var ue = document.getElementById("addUe").value;
-    var K1 = document.getElementById("addK1").value;
-    var K2 = document.getElementById("addK2").value;
+                                                                              // if the parents lastchild is the targetElement...
+                                                                              if (parent.lastChild == targetElement) {
+                                                                                  // add the newElement after the target element.
+                                                                                  parent.appendChild(newElement);
+                                                                              } else {
+                                                                                  // else the target has siblings, insert the new element between the target and it's next sibling.
+                                                                                  parent.insertBefore(newElement, targetElement.nextSibling);
+                                                                              }
+                                                                          }
 
-    if (ue == "") {
-        document.getElementById("addUe").style.color = "#94b8b8";
-        document.getElementById("addUe").value = "Überschrift";
-    }
+                                                                          function build_Head(id, ue, kat1, kat2, neuer_Head_nach_hier, name_neue_container_box) {
 
-    if (K1 == "") {
-        document.getElementById("addK1").style.color = "#94b8b8";
-        document.getElementById("addK1").value = "Kategorie 1";
-    }
+                                                                              // Build containerbox+id nach neuer_Head_nach_hier
+                                                                              var containerbox = document.createElement("DIV");
+                                                                              containerbox.setAttribute("id", name_neue_container_box + id);
+                                                                              containerbox.setAttribute("class", "Containerbox");
+                                                                              var div = document.getElementById(neuer_Head_nach_hier);
+                                                                              insertAfter(containerbox, div);
 
-    if (K2 == "") {
-        document.getElementById("addK2").style.color = "#94b8b8";
-        document.getElementById("addK2").value = "Kategorie 2";
-    }
+                                                                              // Nichts verändern bei 2. und 1!
 
-    document.getElementById("selectTable").value = "Table(1x1)";
-    selectChange();
-}
+                                                                              //2. Adde [Bearbeiten,....]
+                                                                              //<a href="#divcontent36" data-toggle="collapse" class="" aria-expanded="true"> Ausbldenden</a>
+                                                                              //<h3>[Bearbeiten, <a href="#content1" data-toggle="collapse"> Ausbldenden</a>, Markieren(z.B. für FS erstellun etc.),Felder bewegen(bilder verschieben, formeln verschieben etc.)]       HIer noch youtube link, wiki link etc machen!</h3>
+                                                                              var fragment_h3 = create(`<h3>[<a id=` + id + ` href="javascript:add_click(` + id + `)">Add</a>,  <a id=` + id + ` href="javascript:bearbeiten_click(` + id + `)">Edit</a>,  <a href="` + "#divcontent" + id + `" data-toggle="collapse"> Collapse</a>` + ",  " + `<a id=` + id + ` href="javascript:delete_click(` + id + `)">Delete</a>` + "]" + "</h3>");
 
-function addUe(id) {
-    document.getElementById("addUe" + id).value = "";
-    document.getElementById("addUe" + id).style.color = "black";
-}
-
-function changeUe(id) {
-    document.getElementById("changeUe" + id).value = "";
-    document.getElementById("changeUe" + id).style.color = "black";
-}
-
-function addK2(id) {
-    document.getElementById("addK2" + id).value = "";
-    document.getElementById("addK2" + id).style.color = "black";
-}
-function changeK2(id) {
-    document.getElementById("changeK2" + id).value = "";
-    document.getElementById("changeK2" + id).style.color = "black";
-}
-
-function addK1(id) {
-    document.getElementById("addK1" + id).value = "";
-    document.getElementById("addK1" + id).style.color = "black";
-}
-function changeK1(id) {
-    document.getElementById("changeK1" + id).value = "";
-    document.getElementById("changeK1" + id).style.color = "black";
-}
-
-function selectChange() {
-    var tablevalue = document.getElementById("selectTable").value;
-    createTableDoms(parseInt(tablevalue[6]), parseInt(tablevalue[8]));
-}
-
-function createTableDoms(zeilen, spalten) {
-
-    // Delete all doms within addContent
-    var node = document.getElementById("addContent");
-    while (node.hasChildNodes()) {
-        node.removeChild(node.lastChild);
-    }
-
-    //Create rows:
-    for (j = 1; j < (spalten + 1); j++) {
-
-        //console.log("wird ausgeführt!!!")
-        var div = document.createElement("DIV");
-        div.setAttribute("id", "adddiv" + j)
-        document.getElementById("addContent").appendChild(div);
-
-        //style new created div:
-        var divstyle = document.createElement("STYLE");
-        var t = document.createTextNode("#adddiv" + j + "{display:inline-block;}"); // {width: "+1000/(spalten)+"px;
-        divstyle.appendChild(t);
-        document.getElementById("adddiv" + j).appendChild(divstyle);
-
-        // create Textarea:
-        var x = document.createElement("TEXTAREA");
-        var t = document.createTextNode("At w3schools.com you will learn how to make a website.");
-        x.setAttribute("id", "addTextArea" + j);
-        x.appendChild(t);
-        document.getElementById("adddiv" + j).appendChild(x);
-
-        //textarea style:
-        var areastyle = document.createElement("STYLE");
-        var t = document.createTextNode("#addTextArea" + j + "{ width: " + (1200 - spalten * 10) / spalten + "px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px; }");
-        divstyle.appendChild(t);
-        document.getElementById("addTextArea" + j).appendChild(areastyle);
-    }
-
-    return spalten;
-}
-
-function save_Add(id, deletingname) {
-    var indexx = 5;
-
-    if (id == -1) {
-        indexx = -1;
-        id = 0;
-    }
-
-    //get index of a particular id:
-    if (indexx > 0) { // Fall indexx=-1 extra!
-        indexx = getIndex_ofID(id);
-    }
-    console.log("save_Add wurde gecklickt mit id:="+id+" und nachfolgendem deleting element: ");
-    console.log(deletingname);
-    console.log("der Index ist:"+indexx);
-
-    // Kopf Werte:
-    var ue = document.getElementById("addUe" + id).value;
-    var kat1 = document.getElementById("addK1" + id).value;
-    var kat2 = document.getElementById("addK2" + id).value;
-
-    // Inhalt of Textbox'es:
-    var content1 = document.getElementById("addTextArea" + id).value;
-
-    var obj = {
-        "id": datalength,
-        "ue": ue + " ",
-        "kat1": kat1,
-        "kat2": kat2,
-        "Table Selection:": document.getElementById("AddselectTable" + id).value,
-        "Content1": content1
-    };
-
-    data.splice((indexx + 1), 0, obj);
-    datalength++;
-
-    localStorage.tblData = JSON.stringify(data);
-
-    if (localStorage.tblData) {
-        data = JSON.parse(localStorage.tblData);
-        datalength = data.length;
-    }
-
-    // delete AddForm:
-    deleteElementbyname(deletingname);
-
-    for (var pp = 0; pp < data.length; pp++) {
-        buildWebsiteContent(pp); //,"Containerbox"+data[pp]["id"]
-    }
-}
-
-function getIndex_ofID(idd){
-    for (var zz = 0; zz < data.length; zz++) {
-        console.log(data[zz]);
-        if (data[zz]["id"] == idd) {
-            return zz;
-        }
-    }
-    alert("Error getInex_ofID failed! ")
-    return -2; // error
-}
+                                                                                                             var position = document.getElementById(name_neue_container_box + id); //var tex = document.getElementById("eqadddd"); 	//document.getElementById("eqadddd").setAttribute("dd", "hallo");
+                                                                                                             position.insertBefore(fragment_h3, position.childNodes[1]); //	katex.render(String.raw `${formel}`, tex);
 
 
+                                                                                                             //1. Adde Überschrift
+                                                                                                             var fragment_h2 = create(`<h1 id="unterüberschrift_h2_` + id + `"> ` + ue + `</h1>`);
 
-function save_Changes(id) { //TODO erstmal nur auf Content1 ausgelegt!
-    console.log("save_Changes wurde gecklickt mit id: "+id);
-    var ue = document.getElementById("changeUe" + id).value;
-    var k1 = document.getElementById("changeK1" + id).value;
-    var k2 = document.getElementById("changeK2" + id).value;
-    var content1 = document.getElementById("changeTextArea" + id).value
+                                                                                                                                      var position = document.getElementById(name_neue_container_box + id); //var tex = document.getElementById("eqadddd"); 	//document.getElementById("eqadddd").setAttribute("dd", "hallo");
+                                                                                                                                      position.insertBefore(fragment_h2, position.childNodes[0]); //	katex.render(String.raw `${formel}`, tex);
 
-    //2. Change content like this:
-    var indexx = 0;
-    for (var zz = 0; zz < data.length; zz++) {
-        if (data[zz]["id"] == id) {
-            indexx = zz;
-        }
-    }
-    // ändere einfach nur den entsprechenden id eintrag und lade nur diese id danach neu!
-    data[indexx]["Content1"] = content1; //myObj[prop] = value;
-    data[indexx]["ue"] = ue + " ";
-    data[indexx]["kat1"] = k1;
-    data[indexx]["kat2"] = k2;
+                                                                                                                                      //3. Add Kategorie 1 und Kategorie 2:
+                                                                                                                                      var kategorie2 = document.createElement("H4");
+                                                                                                                                      var kategorie2_content = document.createTextNode(kat2);
+                                                                                                                                      kategorie2.setAttribute("id", "kategorie2_" + id);
+                                                                                                                                      kategorie2.appendChild(kategorie2_content);
+                                                                                                                                      document.getElementById(name_neue_container_box + id).appendChild(kategorie2);
 
-    localStorage.tblData = JSON.stringify(data);
+                                                                                                                                      var strich = document.createElement("H4");
+                                                                                                                                      var strichcont = document.createTextNode("_|_");
+                                                                                                                                      strich.appendChild(strichcont);
+                                                                                                                                      document.getElementById(name_neue_container_box + id).appendChild(strich);
 
-    if (localStorage.tblData) {
-        data = JSON.parse(localStorage.tblData);
-        datalength = data.length;
-        console.log(data);
-    }
+                                                                                                                                      var kategorie1 = document.createElement("H4");
+                                                                                                                                      var kategorie1_content = document.createTextNode(kat1);
+                                                                                                                                      kategorie1.setAttribute("id", "kategorie1_" + id);
+                                                                                                                                      kategorie1.appendChild(kategorie1_content);
+                                                                                                                                      document.getElementById(name_neue_container_box + id).appendChild(kategorie1);
 
-    deleteElementbyname(document.getElementById("divcontent" + id));
-    build_Content(data[indexx]["id"], data[indexx]["Content1"]);
-    myRenderer();
-}
+                                                                                                                                      //4. Add linie:
+                                                                                                                                      var linie = document.createElement("HR");
+                                                                                                                                      linie.setAttribute("class", "liniebox");
+                                                                                                                                      document.getElementById(name_neue_container_box + id).appendChild(linie);
+                                                                          }
 
-// Sehr sehr wichtig! diese Klasse rendert alle Formeln!
-function myRenderer() {
-    var x = document.getElementsByClassName('equation-middle');
+                                                                                                                                      function standardFillAddFields() {
+                                                                                                                                          var ue = document.getElementById("addUe").value;
+                                                                                                                                          var K1 = document.getElementById("addK1").value;
+                                                                                                                                          var K2 = document.getElementById("addK2").value;
 
-    // go through each of them in turn
-    for (var i = 0; i < x.length; i++) {
-        try {
-            var aa = x[i].getAttribute("data-expr");
-            if (x[i].tagName == "DIV") {
-                t = katex.render(String.raw `${aa}`, x[i], {
-                    displayMode: true
-                });
-            }
-            /* else {
+                                                                                                                                          if (ue == "") {
+                                                                                                                                              document.getElementById("addUe").style.color = "#94b8b8";
+                                                                                                                                              document.getElementById("addUe").value = "Überschrift";
+                                                                                                                                          }
+
+                                                                                                                                          if (K1 == "") {
+                                                                                                                                              document.getElementById("addK1").style.color = "#94b8b8";
+                                                                                                                                              document.getElementById("addK1").value = "Kategorie 1";
+                                                                                                                                          }
+
+                                                                                                                                          if (K2 == "") {
+                                                                                                                                              document.getElementById("addK2").style.color = "#94b8b8";
+                                                                                                                                              document.getElementById("addK2").value = "Kategorie 2";
+                                                                                                                                          }
+
+                                                                                                                                          document.getElementById("selectTable").value = "Table(1x1)";
+                                                                                                                                          selectChange();
+                                                                                                                                      }
+
+                                                                                                                                      function addUe(id) {
+                                                                                                                                          document.getElementById("addUe" + id).value = "";
+                                                                                                                                          document.getElementById("addUe" + id).style.color = "black";
+                                                                                                                                      }
+
+                                                                                                                                      function changeUe(id) {
+                                                                                                                                          document.getElementById("changeUe" + id).value = "";
+                                                                                                                                          document.getElementById("changeUe" + id).style.color = "black";
+                                                                                                                                      }
+
+                                                                                                                                      function addK2(id) {
+                                                                                                                                          document.getElementById("addK2" + id).value = "";
+                                                                                                                                          document.getElementById("addK2" + id).style.color = "black";
+                                                                                                                                      }
+                                                                                                                                      function changeK2(id) {
+                                                                                                                                          document.getElementById("changeK2" + id).value = "";
+                                                                                                                                          document.getElementById("changeK2" + id).style.color = "black";
+                                                                                                                                      }
+
+                                                                                                                                      function addK1(id) {
+                                                                                                                                          document.getElementById("addK1" + id).value = "";
+                                                                                                                                          document.getElementById("addK1" + id).style.color = "black";
+                                                                                                                                      }
+                                                                                                                                      function changeK1(id) {
+                                                                                                                                          document.getElementById("changeK1" + id).value = "";
+                                                                                                                                          document.getElementById("changeK1" + id).style.color = "black";
+                                                                                                                                      }
+
+                                                                                                                                      function selectChange() {
+                                                                                                                                          var tablevalue = document.getElementById("selectTable").value;
+                                                                                                                                          createTableDoms(parseInt(tablevalue[6]), parseInt(tablevalue[8]));
+                                                                                                                                      }
+
+                                                                                                                                      function createTableDoms(zeilen, spalten) {
+
+                                                                                                                                          // Delete all doms within addContent
+                                                                                                                                          var node = document.getElementById("addContent");
+                                                                                                                                          while (node.hasChildNodes()) {
+                                                                                                                                              node.removeChild(node.lastChild);
+                                                                                                                                          }
+
+                                                                                                                                          //Create rows:
+                                                                                                                                          for (j = 1; j < (spalten + 1); j++) {
+
+                                                                                                                                              //console.log("wird ausgeführt!!!")
+                                                                                                                                              var div = document.createElement("DIV");
+                                                                                                                                              div.setAttribute("id", "adddiv" + j)
+                                                                                                                                              document.getElementById("addContent").appendChild(div);
+
+                                                                                                                                              //style new created div:
+                                                                                                                                              var divstyle = document.createElement("STYLE");
+                                                                                                                                              var t = document.createTextNode("#adddiv" + j + "{display:inline-block;}"); // {width: "+1000/(spalten)+"px;
+                                                                                                                                              divstyle.appendChild(t);
+                                                                                                                                              document.getElementById("adddiv" + j).appendChild(divstyle);
+
+                                                                                                                                              // create Textarea:
+                                                                                                                                              var x = document.createElement("TEXTAREA");
+                                                                                                                                              var t = document.createTextNode("At w3schools.com you will learn how to make a website.");
+                                                                                                                                              x.setAttribute("id", "addTextArea" + j);
+                                                                                                                                              x.appendChild(t);
+                                                                                                                                              document.getElementById("adddiv" + j).appendChild(x);
+
+                                                                                                                                              //textarea style:
+                                                                                                                                              var areastyle = document.createElement("STYLE");
+                                                                                                                                              var t = document.createTextNode("#addTextArea" + j + "{ width: " + (1200 - spalten * 10) / spalten + "px; height: 50px; font-size: 15px; line-height: 150%; margin: 10px 0px 0px 10px; }");
+                                                                                                                                              divstyle.appendChild(t);
+                                                                                                                                              document.getElementById("addTextArea" + j).appendChild(areastyle);
+                                                                                                                                          }
+
+                                                                                                                                          return spalten;
+                                                                                                                                      }
+
+                                                                                                                                      function save_Add(id, deletingname) {
+                                                                                                                                          var indexx = 5;
+
+                                                                                                                                          if (id == -1) {
+                                                                                                                                              indexx = -1;
+                                                                                                                                              id = 0;
+                                                                                                                                          }
+
+                                                                                                                                          //get index of a particular id:
+                                                                                                                                          if (indexx > 0) { // Fall indexx=-1 extra!
+                                                                                                                                              indexx = getIndex_ofID(id);
+                                                                                                                                          }
+                                                                                                                                          console.log("save_Add wurde gecklickt mit id:="+id+" und nachfolgendem deleting element: ");
+                                                                                                                                          console.log(deletingname);
+                                                                                                                                          console.log("der Index ist:"+indexx);
+
+                                                                                                                                          // Kopf Werte:
+                                                                                                                                          var ue = document.getElementById("addUe" + id).value;
+                                                                                                                                          var kat1 = document.getElementById("addK1" + id).value;
+                                                                                                                                          var kat2 = document.getElementById("addK2" + id).value;
+
+                                                                                                                                          // Inhalt of Textbox'es:
+                                                                                                                                          var content1 = document.getElementById("addTextArea" + id).value;
+
+                                                                                                                                          var obj = {
+                                                                                                                                              "id": datalength,
+                                                                                                                                              "ue": ue + " ",
+                                                                                                                                              "kat1": kat1,
+                                                                                                                                              "kat2": kat2,
+                                                                                                                                              "Table Selection:": document.getElementById("AddselectTable" + id).value,
+                                                                                                                                              "Content1": content1
+                                                                                                                                          };
+
+                                                                                                                                          data.splice((indexx + 1), 0, obj);
+                                                                                                                                          datalength++;
+
+                                                                                                                                          localStorage.tblData = JSON.stringify(data);
+
+                                                                                                                                          if (localStorage.tblData) {
+                                                                                                                                              data = JSON.parse(localStorage.tblData);
+                                                                                                                                              datalength = data.length;
+                                                                                                                                          }
+
+                                                                                                                                          // delete AddForm:
+                                                                                                                                          deleteElementbyname(deletingname);
+
+                                                                                                                                          for (var pp = 0; pp < data.length; pp++) {
+                                                                                                                                              buildWebsiteContent(pp); //,"Containerbox"+data[pp]["id"]
+                                                                                                                                          }
+                                                                                                                                      }
+
+                                                                                                                                      function getIndex_ofID(idd){
+                                                                                                                                          for (var zz = 0; zz < data.length; zz++) {
+                                                                                                                                              console.log(data[zz]);
+                                                                                                                                              if (data[zz]["id"] == idd) {
+                                                                                                                                                  return zz;
+                                                                                                                                              }
+                                                                                                                                          }
+                                                                                                                                          alert("Error getInex_ofID failed! ")
+                                                                                                                                          return -2; // error
+                                                                                                                                      }
+
+
+
+                                                                                                                                      function save_Changes(id) { //TODO erstmal nur auf Content1 ausgelegt!
+                                                                                                                                          console.log("save_Changes wurde gecklickt mit id: "+id);
+                                                                                                                                          var ue = document.getElementById("changeUe" + id).value;
+                                                                                                                                          var k1 = document.getElementById("changeK1" + id).value;
+                                                                                                                                          var k2 = document.getElementById("changeK2" + id).value;
+                                                                                                                                          var content1 = document.getElementById("changeTextArea" + id).value
+
+                                                                                                                                          //2. Change content like this:
+                                                                                                                                          var indexx = 0;
+                                                                                                                                          for (var zz = 0; zz < data.length; zz++) {
+                                                                                                                                              if (data[zz]["id"] == id) {
+                                                                                                                                                  indexx = zz;
+                                                                                                                                              }
+                                                                                                                                          }
+                                                                                                                                          // ändere einfach nur den entsprechenden id eintrag und lade nur diese id danach neu!
+                                                                                                                                          data[indexx]["Content1"] = content1; //myObj[prop] = value;
+                                                                                                                                          data[indexx]["ue"] = ue + " ";
+                                                                                                                                          data[indexx]["kat1"] = k1;
+                                                                                                                                          data[indexx]["kat2"] = k2;
+
+                                                                                                                                          localStorage.tblData = JSON.stringify(data);
+
+                                                                                                                                          if (localStorage.tblData) {
+                                                                                                                                              data = JSON.parse(localStorage.tblData);
+                                                                                                                                              datalength = data.length;
+                                                                                                                                              console.log(data);
+                                                                                                                                          }
+
+                                                                                                                                          deleteElementbyname(document.getElementById("divcontent" + id));
+                                                                                                                                          build_Content(data[indexx]["id"], data[indexx]["Content1"]);
+                                                                                                                                          myRenderer();
+                                                                                                                                      }
+
+                                                                                                                                      // Sehr sehr wichtig! diese Klasse rendert alle Formeln!
+                                                                                                                                      function myRenderer() {
+                                                                                                                                          var x = document.getElementsByClassName('equation-middle');
+
+                                                                                                                                          // go through each of them in turn
+                                                                                                                                          for (var i = 0; i < x.length; i++) {
+                                                                                                                                              try {
+                                                                                                                                                  var aa = x[i].getAttribute("data-expr");
+                                                                                                                                                  if (x[i].tagName == "DIV") {
+                                                                                                                                                      t = katex.render(String.raw `${aa}`, x[i], {
+                                                                                                                                                                           displayMode: true
+                                                                                                                                                                       });
+                                                                                                                                                  }
+                                                                                                                                                  /* else {
              t= katex.render(x[i].textContent,x[i]);
              } */
-        } catch (err) {
-            x[i].style.color = 'red';
-            x[i].textContent = err;
-        }
-    }
+                                                                                                                                              } catch (err) {
+                                                                                                                                                  x[i].style.color = 'red';
+                                                                                                                                                  x[i].textContent = err;
+                                                                                                                                              }
+                                                                                                                                          }
 
-    var y = document.getElementsByClassName('equation-inline');
+                                                                                                                                          var y = document.getElementsByClassName('equation-inline');
 
-    // go through each of them in turn
-    for (var j = 0; j < y.length; j++) {
-        try {
-            var aa = y[j].getAttribute("data-expr");
-            if (y[j].tagName == "DIV") {
-                t = katex.render(String.raw `${aa}`, y[j], {
-                    displayMode: false
-                });
-            }
-            /* else {
+                                                                                                                                          // go through each of them in turn
+                                                                                                                                          for (var j = 0; j < y.length; j++) {
+                                                                                                                                              try {
+                                                                                                                                                  var aa = y[j].getAttribute("data-expr");
+                                                                                                                                                  if (y[j].tagName == "DIV") {
+                                                                                                                                                      t = katex.render(String.raw `${aa}`, y[j], {
+                                                                                                                                                                           displayMode: false
+                                                                                                                                                                       });
+                                                                                                                                                  }
+                                                                                                                                                  /* else {
              t= katex.render(x[i].textContent,x[i]);
              } */
-        } catch (err) {
-            y[j].style.color = 'red';
-            y[j].textContent = err;
-        }
-    }
+                                                                                                                                              } catch (err) {
+                                                                                                                                                  y[j].style.color = 'red';
+                                                                                                                                                  y[j].textContent = err;
+                                                                                                                                              }
+                                                                                                                                          }
 
-    var z = document.getElementsByClassName('equation-left');
+                                                                                                                                          var z = document.getElementsByClassName('equation-left');
 
-    // go through each of them in turn
-    for (var i = 0; i < z.length; i++) {
-        try {
-            var aa = z[i].getAttribute("data-expr");
-            if (z[i].tagName == "DIV") {
-                t = katex.render(String.raw `${aa}`, z[i], {
-                    displayMode: true
-                });
-            }
-            /* else {
+                                                                                                                                          // go through each of them in turn
+                                                                                                                                          for (var i = 0; i < z.length; i++) {
+                                                                                                                                              try {
+                                                                                                                                                  var aa = z[i].getAttribute("data-expr");
+                                                                                                                                                  if (z[i].tagName == "DIV") {
+                                                                                                                                                      t = katex.render(String.raw `${aa}`, z[i], {
+                                                                                                                                                                           displayMode: true
+                                                                                                                                                                       });
+                                                                                                                                                  }
+                                                                                                                                                  /* else {
              t= katex.render(x[i].textContent,x[i]);
              } */
-        } catch (err) {
-            z[i].style.color = 'red';
-            z[i].textContent = err;
-        }
-    }
-}
+                                                                                                                                              } catch (err) {
+                                                                                                                                                  z[i].style.color = 'red';
+                                                                                                                                                  z[i].textContent = err;
+                                                                                                                                              }
+                                                                                                                                          }
+                                                                                                                                      }
 
-//Testing and more information:
+                                                                                                                                      //Testing and more information:
 
-/* var key;
+                                                                                                                                      /* var key;
  for(var key in data[31]) {
  var value = data[31][key];
  console.log(value);
  } */
 
-/*var para = document.createElement("P");                       // Create a <p> element
+                                                                                                                                      /*var para = document.createElement("P");                       // Create a <p> element
  var t = document.createTextNode(inputtext);      // Create a text node
  para.setAttribute("id","p3")
  para.appendChild(t);                                          // Append the text to <p>
@@ -953,20 +1015,20 @@ function myRenderer() {
  hallo.push(inputtext)
  console.log(hallo); */
 
-/* content=setCharAt(content,result[0][1],"");
+                                                                                                                                      /* content=setCharAt(content,result[0][1],"");
  content=setCharAt(content,result[0][1],""); // zweites Dollarzeichen am Anfang
 
  content=setCharAt(content,result[0][2]-3,"");
  content=setCharAt(content,result[0][2]-4,""); // zweites Dollarzeichen am Ende */
 
-// \\ zeichen anstatt "\"
-/* var inhalt = result[0][0];
+                                                                                                                                      // \\ zeichen anstatt "\"
+                                                                                                                                      /* var inhalt = result[0][0];
  var inhaltneu=inhalt.replace(String.fromCharCode(92), String.fromCharCode(92,92));
  console.log(inhalt);
  console.log(inhaltneu);
  content = content.replace(inhalt,inhaltneu); */
 
-/* var fragment = create(`<p id="p200" >`+content+"</p>");
+                                                                                                                                      /* var fragment = create(`<p id="p200" >`+content+"</p>");
 
  var position = document.getElementById("content1");
  position.insertBefore(fragment, position.childNodes[0]);
@@ -977,62 +1039,62 @@ function myRenderer() {
  katex.render(String.raw `${eqleft2}`, tex);
  */
 
-// mit Objekten Arbeiten:
-/* var car = new Object();
+                                                                                                                                      // mit Objekten Arbeiten:
+                                                                                                                                      /* var car = new Object();
  car.colour = 'red';
  car.wheels = 4;
  car.hubcaps = 'spinning';
  car.age = 4; */
 
-// Save just javascript data to new file:
-//http://stackoverflow.com/questions/33047709/save-webpage-data-to-file-locally-how-can-get-data-from-a-webpage-into-json-fil
-// JSON can be written into local storage using the JSON.stringify to serialize a JS object. You cannot write to a JSON file using only JS. Only cookies or local storage
-//-> serialize data with jason and load that data in javascript at startup!
-// ->https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/
-// -nutze node js um in txt datei zu schreiben::
-// https://www.youtube.com/watch?v=6hcsrjooU0w
-// -node js ist ein interpreter von javascript
-// -node js ist eventgesteuert 			callback sind funktionen die im Hintergrund ablaufen!
-// -node js hat nonblocking IO Modell implementiert - viele User können parallel Prozesse ausführen.
-// -node js ist für serverseitige Netzwerkanwendungen zuständig. (Multiplayer spiel)
-// -node js echtzeit Anwendungen möglich z.B. etherpad.
-//node js kann ich auf meiner DSM installieren.
-// damit node js fehlerfrei auf webpage läuft ist es etwas schwierig.
+                                                                                                                                      // Save just javascript data to new file:
+                                                                                                                                      //http://stackoverflow.com/questions/33047709/save-webpage-data-to-file-locally-how-can-get-data-from-a-webpage-into-json-fil
+                                                                                                                                      // JSON can be written into local storage using the JSON.stringify to serialize a JS object. You cannot write to a JSON file using only JS. Only cookies or local storage
+                                                                                                                                      //-> serialize data with jason and load that data in javascript at startup!
+                                                                                                                                      // ->https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/
+                                                                                                                                      // -nutze node js um in txt datei zu schreiben::
+                                                                                                                                      // https://www.youtube.com/watch?v=6hcsrjooU0w
+                                                                                                                                      // -node js ist ein interpreter von javascript
+                                                                                                                                      // -node js ist eventgesteuert 			callback sind funktionen die im Hintergrund ablaufen!
+                                                                                                                                      // -node js hat nonblocking IO Modell implementiert - viele User können parallel Prozesse ausführen.
+                                                                                                                                      // -node js ist für serverseitige Netzwerkanwendungen zuständig. (Multiplayer spiel)
+                                                                                                                                      // -node js echtzeit Anwendungen möglich z.B. etherpad.
+                                                                                                                                      //node js kann ich auf meiner DSM installieren.
+                                                                                                                                      // damit node js fehlerfrei auf webpage läuft ist es etwas schwierig.
 
-// WIE SCHREIBE ICH von JAVASCRITP in eine .txt DATEI?
-// geht das wirklich nicht mit nur javascript? oder brauche ich wirklich node js dafür?! oder evtl. jason?
-//// Textdatei einlesen mit javascript: https://www.youtube.com/watch?v=QI_NClLxnF0,
-// save datei on desktop from server: https://www.youtube.com/watch?v=pCdA3YXWRdM
+                                                                                                                                      // WIE SCHREIBE ICH von JAVASCRITP in eine .txt DATEI?
+                                                                                                                                      // geht das wirklich nicht mit nur javascript? oder brauche ich wirklich node js dafür?! oder evtl. jason?
+                                                                                                                                      //// Textdatei einlesen mit javascript: https://www.youtube.com/watch?v=QI_NClLxnF0,
+                                                                                                                                      // save datei on desktop from server: https://www.youtube.com/watch?v=pCdA3YXWRdM
 
-// Javascript storage: https://www.youtube.com/watch?v=klLMeL7I4O0  <-- TODO genau anschauen! und dann den Webstorage benutzen?!
+                                                                                                                                      // Javascript storage: https://www.youtube.com/watch?v=klLMeL7I4O0  <-- TODO genau anschauen! und dann den Webstorage benutzen?!
 
-// Javascript local storage use with json: https://www.youtube.com/watch?v=yzpxUB126YE -> http://devsonline.net/content/index/category/html5/topic/jquery_dom_manipulation_and_localstorage (code!)
-
-
-//localStorage.setItem("username","george");
-//sessionStorage.setItem("username,","hallo!");
-//document.write("<h1>Hi"+localStorage.username+"</h1>");
-
-//Jason Testing:
-//var myObj = { "name":"John", "age":31, "city":"New York" };
-//var myJSON = JSON.stringify(myObj);
-//window.location = "demo_json.php?x=" + myJSON;
-
-// Katex nice rendering guide:
-//  http://sixthform.info/katex/guide.html#imp
-
-//Testing:
-//wenn button click dann speichere Werte in local storage das heißt konkret den inputtext
-// Wenn seite laden dann lade alles aus dem local storage!
+                                                                                                                                      // Javascript local storage use with json: https://www.youtube.com/watch?v=yzpxUB126YE -> http://devsonline.net/content/index/category/html5/topic/jquery_dom_manipulation_and_localstorage (code!)
 
 
-/*
+                                                                                                                                      //localStorage.setItem("username","george");
+                                                                                                                                      //sessionStorage.setItem("username,","hallo!");
+                                                                                                                                      //document.write("<h1>Hi"+localStorage.username+"</h1>");
+
+                                                                                                                                      //Jason Testing:
+                                                                                                                                      //var myObj = { "name":"John", "age":31, "city":"New York" };
+                                                                                                                                      //var myJSON = JSON.stringify(myObj);
+                                                                                                                                      //window.location = "demo_json.php?x=" + myJSON;
+
+                                                                                                                                      // Katex nice rendering guide:
+                                                                                                                                      //  http://sixthform.info/katex/guide.html#imp
+
+                                                                                                                                      //Testing:
+                                                                                                                                      //wenn button click dann speichere Werte in local storage das heißt konkret den inputtext
+                                                                                                                                      // Wenn seite laden dann lade alles aus dem local storage!
+
+
+                                                                                                                                      /*
  At w3schools.com you will learn how to make a website. HIer den Text $$\alpha \beta \gamma $$ und $\alpha \beta$ und $$\frac{1}{1}$$   und $\alpha$. -b(hallo) Ich heiße -i(Markus) und wie ist dein -b(werter Name?). -g(das hier ist zum Beispiel ein Vorteil in grün) und -r(das ist ein -b(Nachteil) in ROT) So jetzt machen wir mal noch einen -link(www.google.de) oder ein Bild -img(https://en.wikipedia.org/wiki/JPEG#/media/File:Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png).
 
  -n -h1(Überschrift) -h2(Unterüberschrift) -link(name,www.google.de) -link(  nameee, www.google.de   ) -olink(www.google.de) -  -b(hallo -b(halihalo) -n schwachsinn -i(-link(-r(www.google.de))))   -uf(-b(Sowas doofes))
  */
 
-/* d
+                                                                                                                                      /* d
 
  At w3schools.com -r(-b(hallo!"""))you will learn how to make a website. HIer den Text $$\alpha \beta \gamma $$ und $\alpha \beta$ und $$\frac{1}{1}$$   und $\alpha$. -b(hallo) Ich heiße -i(Markus) und wie ist dein -b(werter Name?). -g(das hier ist zum Beispiel ein Vorteil in grün) und -r(das ist ein -b(Nachteil) in ROT) So jetzt machen wir mal noch einen -link(www.google.de) oder ein Bild -img(https://en.wikipedia.org/wiki/JPEG#/media/File:Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png).
 
@@ -1041,8 +1103,9 @@ function myRenderer() {
  $$$\alpha$$$ At w3schools.com you will learn how to make a website. -r(hallo lauri ♥) -r(rot)  -r(♥♥♥ ☺☻♦♣♠•◘○◘)
 
  d */
-/*
+                                                                                                                                      /*
 
  -b(Überschrift) -l( --Punkt1 -- -b(-r(Punkt2))--Punkt3 --$\alpha$ ---b($\beta$)) -n Hallo $\alpha$ Hallo $$\alpha$$ hhu $$$\beta$$$
 
  */
+
