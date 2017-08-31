@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Sengine</title>
+
+    <!-- High Charts Scripts: (offline source): -->
+    <script type="text/javascript" src="libs/HighCharts/code/highcharts.js"></script>
+    <script type="text/javascript" src="libs/HighCharts/code/highcharts-3d.js"></script>
+    <script type="text/javascript" src="libs/HighCharts/code/modules/exporting.js"></script>
+    <script type="text/javascript" src="libs/HighCharts/api/js/jquery-1.11.3.min.js"></script>
+
+
+    <!-- KATEX-Latex fast rendering: and information sites:     -->
+    <link rel="stylesheet" type="text/css" href="libs/katex/katex.min.css"/>
+    <script type="text/javascript" src="libs/katex/katex.min.js"></script>
+
+    <!-- script for Matrices etc. Damit kann man math.im und math.re(...) nutzen geht das mit der standart Math. Bibliothek-->
+    <script type="text/javascript" src="libs/math.js"></script>
+
+    <!-- RequireJS is a JavaScript file and module loader.-->
+    <script type="text/javascript" src="libs/require.js"></script>
+
+    <!-- load symblic scripts-->
+    <script type="text/javascript" src="libs/symbolic/V2/nerdamer.core.js"></script>
+    <script type="text/javascript" src="libs/symbolic/V2/Algebra.js"></script>
+    <script type="text/javascript" src="libs/symbolic/V2/Calculus.js"></script>
+    <script type="text/javascript" src="libs/symbolic/V2/Solve.js"></script>
+
+    <!-- Load Algebrite: -->
+    <script type="text/javascript" src="libs/Algebrite.js"></script>
+
+    <!-- logic for this website -->
+    <script type="text/javascript" src="Sengine.js"></script>
+
+    <!-- Load css sheet -->
+    <link rel="stylesheet" type="text/css" href="Sengine.css"/>
+
+
+</head>
+
+
+<body>
+
+
+<textarea rows="5" cols="30" type="text" id="textarea1" class="textarea">A=[[1,2],[4,5]];
+B=[[0],[1]];
+C=[[1,0]];
+</textarea>
+<button class="button" id="button_Gleichung" onclick="main()">Draw it!</button>
+
+
+<h2>TODO: </h2>
+<br>
+<h3>Wie genau aufbauen? - Welche Bibs gibts schon die man verwenden sollte?! </h3>
+
+</body>
+
+</html>     

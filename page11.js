@@ -864,12 +864,13 @@ function berechneWerte3(C1, C2, lambdar, lambdai, xpat) {
 // http://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/members/renderer-rect/
 //http://jsfiddle.net/Sly_cardinal/jm9moswu/1/
 $(function () {
-	var renderer = new Highcharts.Renderer(
-			$('#block-diagramm')[0],
-			600,
-			150);
-	addFigures(renderer);
+    var renderer = new Highcharts.Renderer(
+            $('#block-diagramm')[0],
+            600,
+            150);
+    addFigures(renderer);
 });
+
 
 function addFigures(renderer) {
 

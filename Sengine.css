@@ -1,0 +1,47 @@
+.explanation_box{
+        display: block;
+        float: right;
+        text-align: left;
+}
+.pic{
+display: block;
+float: left;
+}
+.top_box{
+width:61%;
+}
+.main_box{
+text-align:left;
+width:90%;
+}
+.clearer {
+ clear: both;
+}
+
+.main_right{
+display: block;
+float: left;
+text-align: left;
+}
+
+.main_left{
+float:left;
+margin:0 10px 0 0;
+}
+
+.main_middle{
+float:left;
+margin:0 0 0 10px;
+}
+.equation {
+  font-size:      1em; /* size of Equations!!! */
+}
+
+.equation_small{
+font-size:     0.9em; /* size of Equations!!! */
+margin: 0.5em 0 0 0;
+}
+
+h1{
+font-size: 1em;
+}
