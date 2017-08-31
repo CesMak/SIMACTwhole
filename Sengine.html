@@ -16,21 +16,13 @@
     <link rel="stylesheet" type="text/css" href="libs/katex/katex.min.css"/>
     <script type="text/javascript" src="libs/katex/katex.min.js"></script>
 
-    <!-- RequireJS is a JavaScript file and module loader.-->
-  <!--  <script type="text/javascript" src="libs/require.js"></script> -->
-
-
-    <!-- load symblic scripts-->
-<!--    <script type="text/javascript" src="libs/symbolic/V2/nerdamer.core.js"></script>
-    <script type="text/javascript" src="libs/symbolic/V2/Algebra.js"></script>
-    <script type="text/javascript" src="libs/symbolic/V2/Calculus.js"></script>
-    <script type="text/javascript" src="libs/symbolic/V2/Solve.js"></script>-->
-
+    <!-- Load Numeric.js for eigenvalues!: -->
+     <script type="text/javascript" src="libs/numeric.js"></script>
     <!-- script for Matrices etc. Damit kann man math.im und math.re(...) nutzen geht das mit der standart Math. Bibliothek nicht? TODO-->
     <script type="text/javascript" src="libs/math2.js"></script>
-
     <!-- Load Algebrite: -->
     <script type="text/javascript" src="libs/Algebrite.js"></script>
+
 
     <!-- logic for this website -->
     <script type="text/javascript" src="Sengine.js"></script>
@@ -106,27 +98,26 @@ PW(s)=[-10,-20];
 <script>katex.render("{   \\underbrace{\\mathbf{y}(t)}_{q \\times 1}=\\underbrace{\\mathbf{C}}_{q \\times n} \\mathbf{x}(t) +\\underbrace{\\mathbf{D}}_{p \\times q}  \\mathbf{u}(t) }", systemgleichung_werte2);</script>
 
 <h3> Transformations: </h3>
-<div id ="trans1" class="equation_small" data-expr="" ></div>
-<div id ="trans2" class="equation_small" data-expr="" ></div>
+<div id ="trans1" class="equation_small" data-expr=" \mathbf{x}=\mathbf{T} \mathbf{\tilde{x}}\; \; \dot{\mathbf{\tilde{x}}}(t)=\mathbf{T^{-1}}\mathbf{A}\mathbf{T}\mathbf{\tilde{x}}(t) +\mathbf{T^{-1} B}\mathbf{u}(t)" ></div>
+<div id ="trans2" class="equation_small" data-expr=" \mathbf{y}(t)=\mathbf{C T \tilde{x}}(t)" ></div>
 <div id ="trans3" class="equation_small" data-expr="" ></div>
 <div id ="trans4" class="equation_small" data-expr="" ></div>
 <div id ="trans5" class="equation_small" data-expr="" ></div>
-<script>katex.render(" \\mathbf{x}=\\mathbf{T} \\mathbf{\\tilde{x}}\\; \\; \\dot{\\mathbf{x}}(t)=\\mathbf{T^{-1}}\\mathbf{A}\\mathbf{T}\\mathbf{x}(t) +\\mathbf{T^{-1} B}\\mathbf{u}(t)", trans1);</script>
-<script>katex.render(" \\mathbf{y}(t)=\\mathbf{C T x}(t)", trans2);</script>
+<script>katex.render(" \\mathbf{x}=\\mathbf{T} \\mathbf{\\tilde{x}}\\; \\; \\dot{\\mathbf{\\tilde{x}}}(t)=\\mathbf{T^{-1}}\\mathbf{A}\\mathbf{T}\\mathbf{\\tilde{x}}(t) +\\mathbf{T^{-1} B}\\mathbf{u}(t)", trans1);</script>
+<script>katex.render(" \\mathbf{y}(t)=\\mathbf{C T \\tilde{x}}(t)", trans2);</script>
 <script>katex.render(" \\mathbf{T}_{JNF}=\\begin{bmatrix}v_1&...&v_n \\end{bmatrix} \\; \\; \\text{Eigenvectors}\\; v_i", trans3);</script>
 <script>katex.render("\\mathbf{T^{-1}}_{BNF}=\\begin{bmatrix}\\tilde{q}_n&...&A^{n-1}\\tilde{q}_n \\end{bmatrix}", trans4);</script>
 <script>katex.render("\\mathbf{T^{-1}}_{SNF}=\\begin{bmatrix}{q}_n^T\\\\\\vdots\\\\q_n^T A^{n-1}\\end{bmatrix}", trans5);</script>
-
-
-<div id ="BNF1" class="equation_small" data-expr="" ></div>
-<div id ="BNF2" class="equation_small" data-expr="" ></div>
-<script>katex.render(" \\text{BNF:}\\; \\; \\dot{\\mathbf{x}}(t)=\\begin{bmatrix}0&0&0&-a_0\\\\1&0&0&-a_1\\\\0&\\ddots&0&\\vdots\\\\0&0&1&-a_{n-1} \\end{bmatrix}\\mathbf{x}(t) +\\begin{bmatrix}b_0\\\\\\vdots\\\\b_{n-1}  \\end{bmatrix}\\mathbf{u}(t)", BNF1);</script>
-<script>katex.render(" {   \\mathbf{y}(t)=\\begin{bmatrix}0&0&... &1\\end{bmatrix} \\mathbf{x}(t)}", BNF2);</script>
 
 <div id ="SNF1" class="equation_small" data-expr="" ></div>
 <div id ="SNF2" class="equation_small" data-expr="" ></div>
 <script>katex.render(" \\text{SNF:}\\; \\; \\dot{\\mathbf{x}}(t)=\\begin{bmatrix}0&1&0&0\\\\0&0&\\ddots&0\\\\0&0&0&1\\\\-a_0&-a_1&...&-a_{n-1} \\end{bmatrix}\\mathbf{x}(t) +\\begin{bmatrix}0\\\\0\\\\\\vdots\\\\1 \\end{bmatrix}\\mathbf{u}(t)", SNF1);</script>
 <script>katex.render(" {   \\mathbf{y}(t)=\\begin{bmatrix}b_0&b_1&... &b_{n-1}\\end{bmatrix} \\mathbf{x}(t)}", SNF2);</script>
+
+<div id ="BNF1" class="equation_small" data-expr="" ></div>
+<div id ="BNF2" class="equation_small" data-expr="" ></div>
+<script>katex.render(" \\text{BNF:}\\; \\; \\dot{\\mathbf{x}}(t)=\\begin{bmatrix}0&0&0&-a_0\\\\1&0&0&-a_1\\\\0&\\ddots&0&\\vdots\\\\0&0&1&-a_{n-1} \\end{bmatrix}\\mathbf{x}(t) +\\begin{bmatrix}b_0\\\\\\vdots\\\\b_{n-1}  \\end{bmatrix}\\mathbf{u}(t)", BNF1);</script>
+<script>katex.render(" {   \\mathbf{y}(t)=\\begin{bmatrix}0&0&... &1\\end{bmatrix} \\mathbf{x}(t)}", BNF2);</script>
 
 <div id ="JNF1" class="equation_small" data-expr="" ></div>
 <div id ="JNF2" class="equation_small" data-expr="" ></div>
@@ -158,12 +149,36 @@ PW(s)=[-10,-20];
 <div class="main_middle">
 <h3>Kalman:</h3>
 <div id ="controlability" class="equation_small" data-expr="" ></div>
+<div id ="controlability_tilde" class="equation_small" data-expr="" ></div>
 <div id ="observability" class="equation_small" data-expr="" ></div>
-<script>katex.render("Q_S=\\begin{bmatrix}b&AB&...&A^{n-1}B\\end{bmatrix}", controlability);</script>
-<script>katex.render("Q_B=\\begin{bmatrix}C\\\\CA\\\\...\\\\CA^{n-1}\\end{bmatrix}", observability);</script>
+<div id ="observability_tilde" class="equation_small" data-expr="" ></div>
+<script>katex.render("\\textbf{Controllability:}\\; \\;  rank(Q_S) = n \\rightarrow \\text{Sys is controllable}", controlability);</script>
+<script>katex.render("\\textbf{Observability:}\\; \\;    rank(Q_B) = n \\rightarrow \\text{Sys is observable}", observability);</script>
+<script>katex.render("\\mathbf{Q_S}=\\begin{bmatrix}b&AB&...&A^{n-1}B\\end{bmatrix} \\; \\; \\; \\mathbf{\\tilde{q}}_S=\\mathbf{Q_S}\\begin{bmatrix}0&...&1\\end{bmatrix}", controlability_tilde);</script>
+<script>katex.render("\\mathbf{Q_B}=\\begin{bmatrix}C\\\\CA\\\\...\\\\CA^{n-1}\\end{bmatrix} \\; \\; \\; \\mathbf{\\tilde{q}}_B=\\mathbf{Q_B}\\begin{bmatrix}0\\\\\\vdots\\\\1\\end{bmatrix}", observability_tilde);</script>
+
+<h3>Gilbert</h3>
+<div id ="cont_gilbert1" class="equation_small" data-expr="" ></div>
+<div id ="cont_gilbert2" class="equation_small" data-expr="" ></div>
+<script>katex.render("\\textbf{controllable if} \\; \\; \\; \\mathbf{\\tilde{b}_{i,JNF}^T} \\ne \\mathbf{0}^T", cont_gilbert1);</script>
+<script>katex.render("\\text{Eigval. of zero row is not controllable}", cont_gilbert2);</script>
+
+<div id ="observ_gilbert1" class="equation_small" data-expr="" ></div>
+<div id ="observ_gilbert2" class="equation_small" data-expr="" ></div>
+<script>katex.render("\\textbf{observable if} \\; \\; \\; \\mathbf{\\tilde{c}_{i,JNF}} \\ne \\mathbf{0}^T", observ_gilbert1);</script>
+<script>katex.render("\\text{Eigval. of zero column is not observable}", observ_gilbert2);</script>
+
 
 <h3>Hautus</h3>
-<h3>Gilbert</h3>
+<div id ="cont_hautus1" class="equation_small" data-expr="" ></div>
+<div id ="cont_hautus2" class="equation_small" data-expr="" ></div>
+<script>katex.render("\\textbf{controllable if} \\; \\; \\; Rank \\begin{bmatrix} \\lambda_i\\mathbf{I_n - A}&\\mathbf{B} \\end{bmatrix} = n", cont_hautus1);</script>
+<script>katex.render("i=1,...n \\; \\; \\text{if} \\; Rank <n \\; \\; \\lambda_i \\; \\; \\text{is not controllable}", cont_hautus2);</script>
+
+<div id ="observ_hautus1" class="equation_small" data-expr="" ></div>
+<div id ="observ_hautus2" class="equation_small" data-expr="" ></div>
+<script>katex.render("\\textbf{observable if} \\; \\; \\; Rank \\begin{bmatrix} \\lambda_i\\mathbf{I_n - A}\\\\\\mathbf{C} \\end{bmatrix} = n", observ_hautus1);</script>
+<script>katex.render("i=1,...n \\; \\; \\text{if} \\; Rank <n \\; \\; \\lambda_i \\; \\; \\text{is not observable}", observ_hautus2);</script>
 
 <h3> Pole Placement: </h3>
 <div id ="pole_placement" class="equation_small" data-expr="" ></div>

@@ -138,6 +138,7 @@ function getQ_B(A,C,nA,nA_fest,speicher){
         return speicher;
 }
 
+//size of Matrix is n or m?
 function getColumnVectorOfMatrix(matrixasString,sizeofMatrix,pos){
     var a = "["; //ligender Vektor!
     for(var i=0;i<sizeofMatrix;i++){
@@ -159,7 +160,8 @@ function getColumnVectorOfMatrix(matrixasString,sizeofMatrix,pos){
         }
     }
     a=a+"]"
-  //  console.log(a); // immer liegend!
+    console.log(a); // immer liegend!
+    console.log(matrixasString);
    return Algebrite.dot(a,Algebrite.transpose(matrixasString));
 }
 
@@ -195,7 +197,6 @@ function getRowVectorOfMatrix(matrixasString,sizeofMatrix,pos){
 function setMatValue(matrix,i,j,value){
     var matrixasarray = (new Function("return " +matrix+ ";")());
     matrixasarray[i][j]=value;
-   // console.log(matrixasarray);
    return arrayToString(matrixasarray);
 }
 
@@ -281,35 +282,6 @@ function matrix2Latex(matrix){
   return matrixwithbackslash.replace("\\\\end{bmatrix}","\end{bmatrix}");
 }
 
-//A =  Algebrite.run('A='+speicher[0]);
-function fill_matrices_latex(A,B,C,nA,mA,nB,mB,nC,mC,isSISO,charPolyString,eigArray,isStable,
-                             transfereOpenString,Q_S_Kalman,isControllable,Q_B_Kalman,isObservable,
-                             invQ_S_Kalman,invQ_B_Kalman){
-    var systemgleichung_werte1 = "{   \\underbrace{\\dot{{x}}(t)}_{"+nA+" \\times 1}=\\underbrace{{"+matrix2Latex(A)+"}}_{"+nA+" \\times "+nB+"} {x}(t) +\\underbrace{{"+matrix2Latex(B)+"}}_{"+nB+" \\times "+mB+"}  {u}(t) }";
-    document.getElementById("systemgleichung_werte1").setAttribute("data-expr", String.raw`${systemgleichung_werte1}`);
-
-    var systemgleichung_werte2 =" {   \\underbrace{{y}(t)}_{"+nC+" \\times 1}=\\underbrace{{"+matrix2Latex(C)+"}}_{"+nC+" \\times "+nA+"} {x}(t) \\textbf{ "+isSISO+" SYSTEM} }";
-    document.getElementById("systemgleichung_werte2").setAttribute("data-expr", String.raw`${systemgleichung_werte2}`);
-
-    var stablility1 ="\\text{char. Poly.:}\\; \\; P(s)="+math.parse(charPolyString).toTex()+"";
-    document.getElementById("stablility1").setAttribute("data-expr", String.raw`${stablility1}`);
-
-    var stablility2 ="\\text{Eigenvalues:}\\; \\; \\lambda_i="+eigArray+"";
-    document.getElementById("stablility2").setAttribute("data-expr", String.raw`${stablility2}`);
-
-    var stablility3 ="\\text{s-Sys is:}\\; \\; \\;"+isStable+"";
-    document.getElementById("stablility3").setAttribute("data-expr", String.raw`${stablility3}`);
-
-    var controlability ="\\text{Controllability:}\\; \\; Q_S="+matrix2Latex(Q_S_Kalman)+"\\; Q_S^{-1}="+matrix2Latex(invQ_S_Kalman)+"\\text{Sys is} \\;"+isControllable+"";
-    document.getElementById("controlability").setAttribute("data-expr", String.raw`${controlability}`);
-
-    var observability ="\\text{Observability:}\\; \\; \\; Q_B="+matrix2Latex(Q_B_Kalman)+"\\; Q_B^{-1}="+matrix2Latex(invQ_B_Kalman)+"\\text{Sys is} \\;"+isObservable+"";
-    document.getElementById("observability").setAttribute("data-expr", String.raw`${observability}`);
-
-    var transfereopen1 ="G_O(s)="+math.parse(transfereOpenString).toTex();
-    document.getElementById("transfereopen1").setAttribute("data-expr", String.raw`${transfereopen1}`);
-}
-
 function myRenderer() {
     var x = document.getElementsByClassName('equation');
 
@@ -352,6 +324,99 @@ t= katex.render(x[i].textContent,x[i]);
     }
 }
 
+//Matrix as STring like:[[0.34372376933344034,-0.8068982213550735],[0.9390708015880442,0.5906904945688723]]
+//na,Ma dimensions of Matrix
+//factor stellen nach dem komma
+function roundMatrix(MatrixasString,nA,mA,factor){
+    var matrixasarray = (new Function("return " +MatrixasString+ ";")());
+    for(var i=0;i<nA;i++){
+        for(var j=0;j<mA;j++){
+            matrixasarray[i][j]=Math.round(Math.pow(10,factor)*matrixasarray[i][j])/(Math.pow(10,factor));
+        }
+    }
+    return arrayToString(matrixasarray);
+}
+
+//M_SH: Hautus Steuerbarkeit!
+//TODO:
+function checkHautus(eigArray,AasString,BasString,CasString,nA,mB){
+    var nAmB=nA+mB;
+    var resultSH ="";
+    Algebrite.run('M_SH=zero('+nA+','+nAmB+')');
+    var tmpSH=Algebrite.eval('M_SH').toString();
+    for(var p=0;p<nA;p++){
+      resultSH= setMatValue(tmpSH,p,p,1);
+        tmpSH=resultSH;
+    }
+    Algebrite.run('M_SH='+resultSH);
+    var M_SH=Algebrite.dot('U','M_SH').toString();
+    console.log(M_SH);
+    var tmpSH="";
+
+    //Problem:
+//    var stringArray = (new Function("return [" + "0,s"+ "];")());
+//    console.log(stringArray);
+
+
+//    for(var z = 0;z<nA;z++){
+//      tmpSH=setMatValue(M_SH,z,nAmB-1,1)
+//        M_SH=tmpSH;
+//    }
+//    M_SH=tmpSH;
+//    console.log(M_SH);
+   // M_SH=setColumnVectorOfMatrix(M_SH,nAmB-1,BasString)
+//    console.log(M_SH.toString());
+        //console.log(resultSH);
+//   console.log(Algebrite.eval('M_SH').toString());
+  //console.log(Algebrite.eval('U').toString());
+//    setMatrix_besides_Matrix(Algebrite.eval('U').toString(),2,BasString,1,Algebrite.eval('M_SH').toString())
+}
+
+//A =  Algebrite.run('A='+speicher[0]);
+function fill_matrices_latex(A,B,C,nA,mA,nB,mB,nC,mC,isSISO,charPolyString,eigArray,isStable,
+                             transfereOpenString,Q_S_Kalman,isControllable,Q_B_Kalman,isObservable,
+                             invQ_S_Kalman,invQ_B_Kalman,q_thilde_S,q_thilde_B,T_JNFasString,
+                             inv_TJNFasString,A_JNF,B_JNF,C_JNF){
+    var systemgleichung_werte1 = "{   \\underbrace{\\dot{{x}}(t)}_{"+nA+" \\times 1}=\\underbrace{{"+matrix2Latex(A)+"}}_{"+nA+" \\times "+nB+"} {x}(t) +\\underbrace{{"+matrix2Latex(B)+"}}_{"+nB+" \\times "+mB+"}  {u}(t) }";
+    document.getElementById("systemgleichung_werte1").setAttribute("data-expr", String.raw`${systemgleichung_werte1}`);
+
+    var systemgleichung_werte2 =" {   \\underbrace{{y}(t)}_{"+nC+" \\times 1}=\\underbrace{{"+matrix2Latex(C)+"}}_{"+nC+" \\times "+nA+"} {x}(t) \\textbf{ "+isSISO+" SYSTEM} }";
+    document.getElementById("systemgleichung_werte2").setAttribute("data-expr", String.raw`${systemgleichung_werte2}`);
+
+    var stablility1 ="\\text{char. Poly.:}\\; \\; P(s)="+math.parse(charPolyString).toTex()+"";
+    document.getElementById("stablility1").setAttribute("data-expr", String.raw`${stablility1}`);
+
+    var stablility2 ="\\text{Eigenvalues:}\\; \\; \\lambda_i="+eigArray+"";
+    document.getElementById("stablility2").setAttribute("data-expr", String.raw`${stablility2}`);
+
+    var stablility3 ="\\text{s-Sys is:}\\; \\; \\;"+isStable+"";
+    document.getElementById("stablility3").setAttribute("data-expr", String.raw`${stablility3}`);
+
+    var controlability ="\\text{Controllability:}\\; \\; \\text{Sys is} \\;"+isControllable+"";
+    document.getElementById("controlability").setAttribute("data-expr", String.raw`${controlability}`);
+
+    var observability ="\\text{Observability:}\\; \\; \\; \\text{Sys is} \\;"+isObservable+"";
+    document.getElementById("observability").setAttribute("data-expr", String.raw`${observability}`);
+
+    var transfereopen1 ="G_O(s)="+math.parse(transfereOpenString).toTex();
+    document.getElementById("transfereopen1").setAttribute("data-expr", String.raw`${transfereopen1}`);
+
+    var controlability_tilde ="Q_S="+matrix2Latex(Q_S_Kalman)+"\\; Q_S^{-1}="+matrix2Latex(invQ_S_Kalman)+"\\mathbf{\\tilde{q}}_S="+matrix2Latex(q_thilde_S);
+    document.getElementById("controlability_tilde").setAttribute("data-expr", String.raw`${controlability_tilde}`);
+
+   var observability_tilde ="Q_B="+matrix2Latex(Q_B_Kalman)+"\\; Q_B^{-1}="+matrix2Latex(invQ_B_Kalman)+"\\mathbf{\\tilde{q}}_B="+matrix2Latex(q_thilde_B);
+   document.getElementById("observability_tilde").setAttribute("data-expr", String.raw`${observability_tilde}`);
+
+    var trans3 ="T_{JNF}="+matrix2Latex(T_JNFasString)+"\\; \\; \\; T_{JNF}^{-1}="+matrix2Latex(inv_TJNFasString);
+    document.getElementById("trans3").setAttribute("data-expr", String.raw`${trans3}`);
+
+    var trans4 ="\\dot{\\tilde{\\mathbf{x}}}_{JNF}(t)="+matrix2Latex(A_JNF)+"\\mathbf{\\tilde{x}}_{JNF}(t) +"+matrix2Latex(B_JNF)+"\\mathbf{u}(t)";
+    document.getElementById("trans4").setAttribute("data-expr", String.raw`${trans4}`);
+
+    var trans5 ="\\mathbf{y}_{JNF}(t)="+matrix2Latex(C_JNF)+"\\mathbf{\\tilde{x}}_{JNF}(t)";
+    document.getElementById("trans5").setAttribute("data-expr", String.raw`${trans5}`);
+}
+
 function main(){
     read_textarea();
     var isSISO="SISO";
@@ -361,6 +426,7 @@ function main(){
 
     var A =  Algebrite.run('A='+speicher[0]);
     var AasString = Algebrite.eval('A').toString();
+    var AasArray=(new Function("return " +speicher[0]+ ";")())
     var B =  Algebrite.run('B='+speicher[1]);
     var BasString = Algebrite.eval('B').toString();
     var C =  Algebrite.run('C='+speicher[2]);
@@ -436,6 +502,7 @@ function main(){
     //getQ_S(A,B,nA,nA_fest,speicher)
     var Q_S_Kalman=getQ_S(AasString,BasString);
     var invQ_S_Kalman=Algebrite.inv(Q_S_Kalman).toString();
+    var q_thilde_S= "["+getRowVectorOfMatrix(invQ_S_Kalman,nA,nA-1).toString()+"]";// [] for matrix representation.
     console.log("(Kalman) Q_S: "+Q_S_Kalman);
     var rankQ_S_Kalman = Algebrite.rank(Q_S_Kalman);
     if(rankQ_S_Kalman==nA){
@@ -449,6 +516,7 @@ function main(){
 
     var Q_B_Kalman=getQ_B(AasString,CasString);
     var invQ_B_Kalman=Algebrite.inv(Q_B_Kalman).toString();
+    var q_thilde_B=getColumnVectorOfMatrix(invQ_B_Kalman,nA,nA-1).toString();
     console.log("(Kalman) Q_B: "+Q_B_Kalman);
     var rankQ_B_Kalman = Algebrite.rank(Q_B_Kalman);
     if(rankQ_B_Kalman==nA){
@@ -459,16 +527,22 @@ function main(){
         isObservable="not observalbe";
         console.log("System is not (Kalman) observable");
     }
-
     //Hautus Steuerbar beobachtbar:
+    //not working yet cause of symbols!
+   // checkHautus(eigArray,AasString,BasString,CasString,nA,mB,mC);
 
     //Gilbert Steuerbar beobachtbar:
 
     //Pole Placement:
 
     //Transformation auf Jordan Normalform: T_JNF
-     // no idea how to use eigen function?!
-     //-> use numeric js!
+    var eigenvalues_A=numeric.eig(AasArray).E.x;
+    var T_JNFasString = roundMatrix(arrayToString(eigenvalues_A),nA,nA,4);
+    var inv_TJNFasString=roundMatrix(Algebrite.inv(arrayToString(eigenvalues_A)).toString(),nA,nA,4);
+    var A_JNF=roundMatrix(Algebrite.dot(inv_TJNFasString,AasString,T_JNFasString),nA,nA,2);
+    var B_JNF=Algebrite.dot(inv_TJNFasString,BasString).toString();
+    var C_JNF=Algebrite.dot(CasString,T_JNFasString).toString();
+
     //Transformation auf SNF:
 
     //Transformation auf BNF:
@@ -482,7 +556,8 @@ function main(){
 
     fill_matrices_latex(AasString,BasString,CasString,nA,mA,nB,mB,nC,mC,isSISO,
                         charPolyString,eigArray,isStable,transfereOpenString,Q_S_Kalman,isControllable,Q_B_Kalman,isObservable,
-                        invQ_S_Kalman,invQ_B_Kalman);
+                        invQ_S_Kalman,invQ_B_Kalman,q_thilde_S,q_thilde_B,T_JNFasString,inv_TJNFasString,
+                        A_JNF,B_JNF,C_JNF);
 
     myRenderer();
 
